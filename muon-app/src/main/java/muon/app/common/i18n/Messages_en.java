@@ -262,8 +262,12 @@ public class Messages_en extends ListResourceBundle {
             {"language", "Language"},
             {"log_viewer_lines", "Log viewer lines per page" },
             {"log_viewer_font_size", "Log viewer font size"},
-            {"system_refresh_interval", "System load refresh interval (sec) "}
-
+            {"system_refresh_interval", "System load refresh interval (sec) "},
+            {"autorename", "Autorename"},
+            {"use_sudo_if_fails", "Use sudo if the operation fails due to permissions issues (carefull!)"},
+            {"transfer_temporary_directory", "Transfer files to temporary directory when operation fails due to permission issues"},
+            {"show_filebrowser_first", "Show FileBrowser tab first"},
+            {"connection_timeout", "Connection timeout"}
 
     };
 }

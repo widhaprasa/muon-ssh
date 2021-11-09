@@ -262,7 +262,11 @@ public class Messages_es extends ListResourceBundle {
             {"language", "Idioma"},
             {"log_viewer_lines", "Lineas por pagina para el visor de logs" },
             {"log_viewer_font_size", "Tamaño de fuente para visor de logs"},
-            {"system_refresh_interval", "Intervalo de tiempo de refresco (seg) "}
-
+            {"system_refresh_interval", "Intervalo de tiempo de refresco (seg) "},
+            {"autorename", "Autorenombrar"},
+            {"use_sudo_if_fails", "Usar sudo si la operacion falla por permisos (cuidado!)"},
+            {"transfer_temporary_directory", "Transfiera archivos al directorio temporal cuando la operación falla debido a problemas de permisos"},
+            {"show_filebrowser_first", "Mostrar primero la pestaña Explorador de archivos"},
+            {"connection_timeout", "Tiempo limite de conexion"}
     };
 }
