@@ -269,7 +269,5 @@ public class Messages_es extends ListResourceBundle {
             {"show_filebrowser_first", "Mostrar primero la pestaña Explorador de archivos"},
             {"connection_timeout", "Tiempo limite de conexion"}
 
-
-
     };
 }

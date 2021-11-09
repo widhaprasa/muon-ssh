@@ -269,8 +269,5 @@ public class Messages_en extends ListResourceBundle {
             {"show_filebrowser_first", "Show FileBrowser tab first"},
             {"connection_timeout", "Connection timeout"}
 
-
-
-
     };
 }
