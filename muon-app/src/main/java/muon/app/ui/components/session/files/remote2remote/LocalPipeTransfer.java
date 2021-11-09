@@ -10,7 +10,7 @@ import muon.app.ssh.SshFileSystem;
 import muon.app.ui.components.session.NewSessionDlg;
 import muon.app.ui.components.session.SessionInfo;
 import muon.app.ui.components.session.files.FileBrowser;
-import muon.app.ui.components.session.files.transfer.FileTransfer.ConflictAction;
+import util.Constants;
 
 public class LocalPipeTransfer {
 	public void transferFiles(FileBrowser fileBrowser, String currentDirectory, FileInfo[] selectedFiles) {
@@ -57,7 +57,7 @@ public class LocalPipeTransfer {
 
 				SshFileSystem sshFS = ri.getSshFs();
 				fileBrowser.newFileTransfer(fileBrowser.getSSHFileSystem(), sshFS, selectedFiles, path, this.hashCode(),
-						ConflictAction.Prompt);
+						Constants.ConflictAction.PROMPT, null);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package muon.app.ssh;
 
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -22,12 +23,12 @@ import net.schmizz.sshj.connection.channel.direct.Session.Command;
  *
  */
 public class RemoteSessionInstance {
-	private SshClient2 ssh;
-	private SshFileSystem sshFs;
-	private AtomicBoolean closed = new AtomicBoolean(false);
+	private final SshClient2 ssh;
+	private final SshFileSystem sshFs;
+	private final AtomicBoolean closed = new AtomicBoolean(false);
 
 	public RemoteSessionInstance(SessionInfo info, InputBlocker inputBlocker,
-			CachedCredentialProvider cachedCredentialProvider) {
+								 CachedCredentialProvider cachedCredentialProvider) {
 		this.ssh = new SshClient2(info, inputBlocker, cachedCredentialProvider);
 		this.sshFs = new SshFileSystem(this.ssh);
 	}
@@ -44,7 +45,7 @@ public class RemoteSessionInstance {
 				try (Session session = ssh.openSession()) {
 					session.setAutoExpand(true);
 					if (pty) {
-						session.allocatePTY("vt100", 80, 24, 0, 0, Collections.<PTYMode, Integer>emptyMap());
+						session.allocatePTY("vt100", 80, 24, 0, 0, Collections.emptyMap());
 					}
 					try (final Command cmd = session.exec(command)) {
 						return callback.apply(cmd);
@@ -72,18 +73,10 @@ public class RemoteSessionInstance {
 		ByteArrayOutputStream berr = error == null ? null : new ByteArrayOutputStream();
 		int ret = execBin(command, stopFlag, bout, berr);
 		if (output != null) {
-			try {
-				output.append(new String(bout.toByteArray(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			output.append(new String(bout.toByteArray(), StandardCharsets.UTF_8));
 		}
 		if (error != null) {
-			try {
-				error.append(new String(berr.toByteArray(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			error.append(new String(berr.toByteArray(), StandardCharsets.UTF_8));
 		}
 		return ret;
 	}
@@ -179,7 +172,7 @@ public class RemoteSessionInstance {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void close() {
 		try {

@@ -3,6 +3,7 @@ package muon.app.ui.components.session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -305,5 +306,18 @@ public class SessionInfo extends NamedItem implements Serializable {
 
 	public void setPortForwardingRules(List<PortForwardingRule> portForwardingRules) {
 		this.portForwardingRules = portForwardingRules;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SessionInfo that = (SessionInfo) o;
+		return Objects.equals(host, that.host);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(host, user, localFolder, remoteFolder, port, favouriteRemoteFolders, favouriteLocalFolders, privateKeyFile, proxyPort, proxyHost, proxyUser, proxyPassword, proxyType, useJumpHosts, jumpType, jumpHosts, portForwardingRules, password);
 	}
 }

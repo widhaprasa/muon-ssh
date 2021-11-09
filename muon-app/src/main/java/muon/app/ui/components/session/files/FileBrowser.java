@@ -1,19 +1,13 @@
 package muon.app.ui.components.session.files;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -21,9 +15,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 
 import muon.app.App;
 import muon.app.common.FileInfo;
@@ -31,19 +22,16 @@ import muon.app.common.FileSystem;
 import muon.app.ssh.RemoteSessionInstance;
 import muon.app.ssh.SshFileSystem;
 import muon.app.ui.components.ClosableTabbedPanel;
-import muon.app.ui.components.FontAwesomeIcon;
 import muon.app.ui.components.SkinnedSplitPane;
 import muon.app.ui.components.session.Page;
 import muon.app.ui.components.session.SessionContentPanel;
 import muon.app.ui.components.session.SessionInfo;
-import muon.app.ui.components.session.files.AbstractFileBrowserView.PanelOrientation;
 import muon.app.ui.components.session.files.local.LocalFileBrowserView;
 import muon.app.ui.components.session.files.ssh.SshFileBrowserView;
 import muon.app.ui.components.session.files.transfer.FileTransfer;
 import muon.app.ui.components.session.files.transfer.FileTransferProgress;
-import muon.app.ui.components.session.files.transfer.FileTransfer.ConflictAction;
-import muon.app.ui.components.session.files.transfer.FileTransfer.TransferMode;
 import muon.app.ui.components.session.files.view.DndTransferData;
+import util.Constants;
 import util.FontAwesomeContants;
 import static muon.app.App.bundle;
 
@@ -78,17 +66,17 @@ public class FileBrowser extends Page {
 
 		localMenuItem.addActionListener(e -> {
 			if (leftPopup) {
-				openLocalFileBrowserView(null, PanelOrientation.Left);
+				openLocalFileBrowserView(null, AbstractFileBrowserView.PanelOrientation.Left);
 			} else {
-				openLocalFileBrowserView(null, PanelOrientation.Right);
+				openLocalFileBrowserView(null, AbstractFileBrowserView.PanelOrientation.Right);
 			}
 		});
 
 		remoteMenuItem.addActionListener(e -> {
 			if (leftPopup) {
-				openSshFileBrowserView(null, PanelOrientation.Left);
+				openSshFileBrowserView(null, AbstractFileBrowserView.PanelOrientation.Left);
 			} else {
-				openSshFileBrowserView(null, PanelOrientation.Right);
+				openSshFileBrowserView(null, AbstractFileBrowserView.PanelOrientation.Right);
 			}
 		});
 
@@ -341,7 +329,7 @@ public class FileBrowser extends Page {
 
 	public void openSshFileBrowserView(String path, AbstractFileBrowserView.PanelOrientation orientation) {
 		SshFileBrowserView tab = new SshFileBrowserView(this, path, orientation);
-		if (orientation == PanelOrientation.Left) {
+		if (orientation == AbstractFileBrowserView.PanelOrientation.Left) {
 			this.leftTabs.addTab(tab.getTabTitle(), tab);
 		} else {
 			this.rightTabs.addTab(tab.getTabTitle(), tab);
@@ -351,7 +339,7 @@ public class FileBrowser extends Page {
 	public void openLocalFileBrowserView(String path, AbstractFileBrowserView.PanelOrientation orientation) {
 
 		LocalFileBrowserView tab = new LocalFileBrowserView(this, path, orientation);
-		if (orientation == PanelOrientation.Left) {
+		if (orientation == AbstractFileBrowserView.PanelOrientation.Left) {
 			this.leftTabs.addTab(tab.getTabTitle(), tab);
 		} else {
 			this.rightTabs.addTab(tab.getTabTitle(), tab);
@@ -483,14 +471,14 @@ public class FileBrowser extends Page {
 	 * @param backgroundTransfer
 	 */
 	public void newFileTransfer(FileSystem sourceFs, FileSystem targetFs, FileInfo[] files, String targetFolder,
-			int dragsource, ConflictAction defaultConflictAction) {
+								int dragsource, Constants.ConflictAction defaultConflictAction, RemoteSessionInstance instance) {
 		System.out.println("Initiating new file transfer...");
 		this.ongoingFileTransfer = new FileTransfer(sourceFs, targetFs, files, targetFolder,
 				new FileTransferProgress() {
 
 					@Override
 					public void progress(long processedBytes, long totalBytes, long processedCount, long totalCount,
-							FileTransfer fileTransfer) {
+										 FileTransfer fileTransfer) {
 						SwingUtilities.invokeLater(() -> {
 							if (totalBytes == 0) {
 								holder.setTransferProgress(0);
@@ -522,7 +510,7 @@ public class FileBrowser extends Page {
 							reloadView();
 						});
 					}
-				}, defaultConflictAction);
+				}, defaultConflictAction, instance);
 		holder.startFileTransferModal(e -> {
 			this.ongoingFileTransfer.close();
 		});
@@ -555,11 +543,11 @@ public class FileBrowser extends Page {
 			return;
 		}
 		init.set(true);
-		SshFileBrowserView left = new SshFileBrowserView(this, null, PanelOrientation.Left);
+		SshFileBrowserView left = new SshFileBrowserView(this, null, AbstractFileBrowserView.PanelOrientation.Left);
 		this.leftTabs.addTab(left.getTabTitle(), left);
 
 		LocalFileBrowserView right = new LocalFileBrowserView(this, System.getProperty("user.home"),
-				PanelOrientation.Right);
+				AbstractFileBrowserView.PanelOrientation.Right);
 		this.rightTabs.addTab(right.getTabTitle(), right);
 	}
 
@@ -582,7 +570,7 @@ public class FileBrowser extends Page {
 	}
 
 	public void openPath(String path) {
-		openSshFileBrowserView(path, PanelOrientation.Left);
+		openSshFileBrowserView(path, AbstractFileBrowserView.PanelOrientation.Left);
 	}
 
 	public boolean isSessionClosed() {
@@ -590,39 +578,39 @@ public class FileBrowser extends Page {
 	}
 
 	public static class ResponseHolder {
-		public TransferMode transferMode;
-		public ConflictAction conflictAction;
+		public Constants.TransferMode transferMode;
+		public Constants.ConflictAction conflictAction;
 	}
 
 	public boolean selectTransferModeAndConflictAction(ResponseHolder holder) throws Exception {
 		holder.transferMode = App.getGlobalSettings().getFileTransferMode();
 		holder.conflictAction = App.getGlobalSettings().getConflictAction();
 
-		if (holder.transferMode == TransferMode.Prompt) {
-			DefaultComboBoxModel<String> conflictOptions = new DefaultComboBoxModel<>();
-			JComboBox<String> cmbConflictOptions = new JComboBox<>(conflictOptions);
+		/*if (holder.transferMode == Constants.TransferMode.NORMAL) {
+			DefaultComboBoxModel<Constants.ConflictAction> conflictOptions = new DefaultComboBoxModel<>(Constants.ConflictAction.values());
+			DefaultComboBoxModel<Constants.TransferMode> transferModes = new DefaultComboBoxModel<>(Constants.TransferMode.values());
 
-			List<String> conflictOption1 = Arrays.asList("Overwrite", "Auto rename", "Skip", "Prompt");
-			List<String> conflictOption2 = Arrays.asList("Overwrite", "Auto rename", "Skip");
+			JComboBox<Constants.ConflictAction> cmbConflictOptions = new JComboBox<>(conflictOptions);
 
-			JComboBox<String> cmbOptions = new JComboBox<>(
-					new String[] { "Transfer normally", "Transfer in background" });
+			JComboBox<Constants.TransferMode> cmbOptions = new JComboBox<>(transferModes);
 
 			cmbOptions.addActionListener(e -> {
 				if (cmbOptions.getSelectedIndex() == 0) {
 					conflictOptions.removeAllElements();
-					conflictOptions.addAll(conflictOption1);
+					for ( Constants.ConflictAction conflictAction : Constants.ConflictAction.values()) {
+						conflictOptions.addElement(conflictAction);
+					}
 					cmbConflictOptions.setSelectedIndex(3);
 				} else {
 					conflictOptions.removeAllElements();
-					conflictOptions.addAll(conflictOption2);
+					for ( Constants.ConflictAction conflictAction : Constants.ConflictAction.values()) {
+						if (conflictAction.getKey() <3 ) {
+							conflictOptions.addElement(conflictAction);
+						}
+					}
 					cmbConflictOptions.setSelectedIndex(0);
 				}
 			});
-
-			cmbOptions.setSelectedIndex(0);
-			// set initial values
-			conflictOptions.addAll(conflictOption1);
 
 			JCheckBox chkRememberOptions = new JCheckBox("Remember this options and don't ask again");
 
@@ -633,32 +621,19 @@ public class FileBrowser extends Page {
 					null) != JOptionPane.OK_OPTION) {
 				return false;
 			}
-			holder.transferMode = cmbOptions.getSelectedIndex() == 0 ? TransferMode.Normal : TransferMode.Background;
-			switch (cmbConflictOptions.getSelectedIndex()) {
-			case 0:
-				holder.conflictAction = ConflictAction.OverWrite;
-				break;
-			case 1:
-				holder.conflictAction = ConflictAction.AutoRename;
-				break;
-			case 2:
-				holder.conflictAction = ConflictAction.Skip;
-				break;
-			case 3:// this is allowed in normal transfer mode
-				holder.conflictAction = ConflictAction.Prompt;
-				break;
-			}
+			holder.transferMode = (Constants.TransferMode) cmbOptions.getSelectedItem();
+			holder.conflictAction = (Constants.ConflictAction) cmbConflictOptions.getSelectedItem();
 			if (chkRememberOptions.isSelected()) {
 				App.getGlobalSettings().setFileTransferMode(holder.transferMode);
 				App.getGlobalSettings().setConflictAction(holder.conflictAction);
 				App.saveSettings();
 			}
-		}
+		}*/
 		return true;
 	}
 
 	public boolean handleLocalDrop(DndTransferData transferData, SessionInfo info, FileSystem currentFileSystem,
-			String currentPath) {
+								   String currentPath) {
 //		System.out.println("### " + transferData.getSource() + " " + this.hashCode());
 //		if (transferData.getSource() == this.hashCode()) {
 //			return false;
@@ -684,7 +659,7 @@ public class FileBrowser extends Page {
 			}
 
 			if (info != null && info.hashCode() == sessionHashCode) {
-				if (holder.transferMode == TransferMode.Background) {
+				if (holder.transferMode == Constants.TransferMode.BACKGROUND) {
 					this.getHolder().downloadInBackground(transferData.getFiles(), currentPath, holder.conflictAction);
 					return true;
 				}
@@ -694,7 +669,7 @@ public class FileBrowser extends Page {
 				}
 				FileSystem targetFs = currentFileSystem;
 				this.newFileTransfer(sourceFs, targetFs, transferData.getFiles(), currentPath, this.hashCode(),
-						holder.conflictAction);
+						holder.conflictAction, this.getSessionInstance());
 			}
 			return true;
 		} catch (Exception e) {
