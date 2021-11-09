@@ -10,7 +10,7 @@ description: |
   More information is available on GitHub Repo: https://github.com/devlinx9/muon-ssh
 grade: stable
 base: core18
-icon: snap/gui/muon.png
+icon: snap/gui/muonssh.png
 confinement: strict
 
 apps:
