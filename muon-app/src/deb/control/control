@@ -1,4 +1,4 @@
-Package: muon
+Package: muonssh
 Version: [[version]]
 Section: base
 Priority: optional
