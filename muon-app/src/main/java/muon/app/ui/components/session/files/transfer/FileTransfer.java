@@ -9,64 +9,86 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
+import muon.app.App;
 import muon.app.common.FileInfo;
 import muon.app.common.FileSystem;
 import muon.app.common.FileType;
 import muon.app.common.InputTransferChannel;
 import muon.app.common.OutputTransferChannel;
+import muon.app.ssh.RemoteSessionInstance;
 import muon.app.ssh.SSHRemoteFileInputStream;
 import muon.app.ssh.SSHRemoteFileOutputStream;
 import muon.app.ssh.SshFileSystem;
+import muon.app.ui.components.session.files.FileBrowser;
+import util.Constants;
+import util.Constants.*;
 import util.PathUtils;
+import util.SudoUtils;
 
 public class FileTransfer implements Runnable, AutoCloseable {
-	private FileSystem sourceFs, targetFs;
-	private FileInfo[] files;
-	private String targetFolder;
+	private final FileSystem sourceFs;
+	private final FileSystem targetFs;
+	private final FileInfo[] files;
+	private final String targetFolder;
 	private long totalSize;
-	private AtomicBoolean stopFlag = new AtomicBoolean(false);
+	private final AtomicBoolean stopFlag = new AtomicBoolean(false);
 
 	private FileTransferProgress callback;
 	private long processedBytes;
 	private int processedFilesCount;
 	private long totalFiles;
-	private ConflictAction conflictAction = ConflictAction.Prompt; // 0 -> overwrite, 1 -> auto rename, 2
+	private Constants.ConflictAction conflictAction = ConflictAction.PROMPT; // 0 -> overwrite, 1 -> auto rename, 2
 	// -> skip
 	private static final int BUF_SIZE = Short.MAX_VALUE;
 
-	public enum ConflictAction {
+	private final RemoteSessionInstance instance;
+
+	/*public enum ConflictAction {
 		OverWrite, AutoRename, Skip, Prompt, Cancel
 	}
 
 	public enum TransferMode {
 		Prompt, Background, Normal
-	}
+	}*/
 
-	public FileTransfer(FileSystem sourceFs, FileSystem targetFs, FileInfo[] files, String targetFolder,
-			FileTransferProgress callback, ConflictAction defaultConflictAction) {
+	/*public FileTransfer(FileSystem sourceFs, FileSystem targetFs, FileInfo[] files, String targetFolder,
+						FileTransferProgress callback, Constants.ConflictAction defaultConflictAction) {
 		this.sourceFs = sourceFs;
 		this.targetFs = targetFs;
 		this.files = files;
 		this.targetFolder = targetFolder;
 		this.callback = callback;
 		this.conflictAction = defaultConflictAction;
-		if (defaultConflictAction == ConflictAction.Cancel) {
+		if (defaultConflictAction == Constants.ConflictAction.CANCEL) {
+			throw new IllegalArgumentException("defaultConflictAction can not be ConflictAction.Cancel");
+		}
+	}
+*/
+	public FileTransfer(FileSystem sourceFs, FileSystem targetFs, FileInfo[] files, String targetFolder,
+						FileTransferProgress callback, Constants.ConflictAction defaultConflictAction, RemoteSessionInstance instance) {
+		this.sourceFs = sourceFs;
+		this.targetFs = targetFs;
+		this.files = files;
+		this.targetFolder = targetFolder;
+		this.callback = callback;
+		this.conflictAction = defaultConflictAction;
+		this.instance = instance;
+		if (defaultConflictAction == Constants.ConflictAction.CANCEL) {
 			throw new IllegalArgumentException("defaultConflictAction can not be ConflictAction.Cancel");
 		}
 	}
 
-	private void transfer(String targetFolder) throws Exception {
+	private void transfer(String targetFolder, RemoteSessionInstance instance1) throws Exception {
 		System.out.println("Copying to " + targetFolder);
 		List<FileInfoHolder> fileList = new ArrayList<>();
 		List<FileInfo> list = targetFs.list(targetFolder);
 		List<FileInfo> dupList = new ArrayList<>();
 
-		if (this.conflictAction == ConflictAction.Prompt) {
+		if (this.conflictAction == Constants.ConflictAction.PROMPT) {
 			this.conflictAction = checkForConflict(dupList);
-			if (dupList.size() > 0 && this.conflictAction == ConflictAction.Cancel) {
+			if (dupList.size() > 0 && this.conflictAction == ConflictAction.CANCEL) {
 				System.out.println("Operation cancelled by user");
 				return;
 			}
@@ -80,10 +102,10 @@ public class FileTransfer implements Runnable, AutoCloseable {
 
 			String proposedName = null;
 			if (isDuplicate(list, file.getName())) {
-				if (this.conflictAction == ConflictAction.AutoRename) {
+				if (this.conflictAction == ConflictAction.AUTORENAME) {
 					proposedName = generateNewName(list, file.getName());
 					System.out.println("new name: " + proposedName);
-				} else if (this.conflictAction == ConflictAction.Skip) {
+				} else if (this.conflictAction == ConflictAction.SKIP) {
 					continue;
 				}
 			}
@@ -116,28 +138,37 @@ public class FileTransfer implements Runnable, AutoCloseable {
 	public void run() {
 		try {
 			try {
-				transfer(this.targetFolder);
+				transfer(this.targetFolder,instance);
 				callback.done(this);
 			} catch (AccessDeniedException e) {
 				if (targetFs instanceof SshFileSystem) {
-					if (JOptionPane.showConfirmDialog(null,
-							"Permission denied, do you want to copy files to a temporary folder first and copy them to destination with sudo?",
-							"Insufficient permission", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-						throw e;
-					}
 					String tmpDir = "/tmp/" + UUID.randomUUID();
-					targetFs.mkdir(tmpDir);
-					transfer(tmpDir);
-					String command = "sh -c  \"cd '" + tmpDir + "'; cp -r * '" + this.targetFolder + "'\"";
-					// String command = "sh -c cp -r \"" + tmpDir + "/*\" \"" +
-					// this.targetFolder + "\"";
-					System.out.println("Invoke sudo: " + command);
-					int ret = -1;// SudoUtils.runSudo(command.toString(),
-									// ((SshFileSystem) targetFs).getWrapper());
-					if (ret == 0) {
+					if (App.getGlobalSettings().isTransferTemporaryDirectory()){
+						targetFs.mkdir(tmpDir);
+						transfer(tmpDir,instance);
 						callback.done(this);
-						return;
+						JTextArea tmpFilePath = new JTextArea(5, 20);
+						tmpFilePath.setText("Files copied in "+tmpDir + " due to permission issues");
+						tmpFilePath.setEnabled(true);
+						JOptionPane.showMessageDialog(null, tmpFilePath,"Copied to temp directory", JOptionPane.WARNING_MESSAGE);
+
+						if (!App.getGlobalSettings().isPromptForSudo() ||
+								JOptionPane.showConfirmDialog(null,
+										"Permission denied, do you want to copy files from the temporary folder to destination with sudo?",
+										"Insufficient permission", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							String command = "sh -c  \"cd '" + tmpDir + "'; cp -r * '" + this.targetFolder + "'\"";
+							// String command = "sh -c cp -r \"" + tmpDir + "/*\" \"" +
+							// this.targetFolder + "\"";
+							System.out.println("Invoke sudo: " + command);
+							int ret = SudoUtils.runSudo(command,instance);
+							if (ret == 0) {
+								callback.done(this);
+								return;
+							}
+						}
 					}
+
+
 					throw e;
 				}
 			}
@@ -177,7 +208,7 @@ public class FileTransfer implements Runnable, AutoCloseable {
 	}
 
 	private synchronized void copyFile(FileInfo file, String targetDirectory, String proposedName,
-			InputTransferChannel inc, OutputTransferChannel outc) throws Exception {
+									   InputTransferChannel inc, OutputTransferChannel outc) throws Exception {
 
 		String outPath = PathUtils.combine(targetDirectory, proposedName == null ? file.getName() : proposedName,
 				outc.getSeparator());
@@ -197,7 +228,7 @@ public class FileTransfer implements Runnable, AutoCloseable {
 				bufferCapacity = ((SSHRemoteFileOutputStream) out).getBufferCapacity();
 			}
 
-			byte buf[] = new byte[bufferCapacity];
+			byte[] buf = new byte[bufferCapacity];
 
 			while (len > 0 && !stopFlag.get()) {
 				int x = in.read(buf);
@@ -264,26 +295,23 @@ public class FileTransfer implements Runnable, AutoCloseable {
 			}
 		}
 
-		ConflictAction action = ConflictAction.Cancel;
+		ConflictAction action = ConflictAction.CANCEL;
 		if (dupList.size() > 0) {
-			JComboBox<String> cmbs = new JComboBox<>(new String[] { "Overwrite", "Auto rename", "Skip" });
+
+			DefaultComboBoxModel<Constants.ConflictAction> conflictOptionsCmb = new DefaultComboBoxModel<>(Constants.ConflictAction.values());
+			conflictOptionsCmb.removeAllElements();
+			for ( Constants.ConflictAction conflictActionCmb : Constants.ConflictAction.values()) {
+				if (conflictActionCmb.getKey() <3 ) {
+					conflictOptionsCmb.addElement(conflictActionCmb);
+				}
+			}
+			JComboBox<Constants.ConflictAction> cmbs = new JComboBox<>(conflictOptionsCmb);
+
 			if (JOptionPane.showOptionDialog(null,
 					new Object[] { "Some file with the same name already exists. Please choose an action", cmbs },
 					"Action required", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
 					null) == JOptionPane.YES_OPTION) {
-				switch (cmbs.getSelectedIndex()) {
-				case 0:
-					action = ConflictAction.OverWrite;
-					break;
-				case 1:
-					action = ConflictAction.AutoRename;
-					break;
-				case 2:
-					action = ConflictAction.Skip;
-					break;
-				default:
-					break;
-				}
+				action = (ConflictAction) cmbs.getSelectedItem();
 			}
 		}
 

@@ -22,17 +22,16 @@ import muon.app.ssh.RemoteSessionInstance;
 import muon.app.ssh.SshFileSystem;
 import muon.app.ui.components.session.files.AbstractFileBrowserView;
 import muon.app.ui.components.session.files.FileBrowser;
-import muon.app.ui.components.session.files.FileBrowser.ResponseHolder;
-import muon.app.ui.components.session.files.transfer.FileTransfer.TransferMode;
 import muon.app.ui.components.session.files.view.AddressBar;
 import muon.app.ui.components.session.files.view.DndTransferData;
 import muon.app.ui.components.session.files.view.DndTransferHandler;
+import util.Constants;
 import util.PathUtils;
 
 public class SshFileBrowserView extends AbstractFileBrowserView {
-	private SshMenuHandler menuHandler;
-	private JPopupMenu addressPopup;
-	private DndTransferHandler transferHandler;
+	private final SshMenuHandler menuHandler;
+	private final JPopupMenu addressPopup;
+	private final DndTransferHandler transferHandler;
 //	private JComboBox<String> cmbOptions = new JComboBox<>(
 //			new String[] { "Transfer normally", "Transfer in background" });
 
@@ -182,7 +181,7 @@ public class SshFileBrowserView extends AbstractFileBrowserView {
 							return;
 						}
 						System.out.println("Exception caught in sftp file browser: " + e.getMessage());
-						
+
 						this.fileBrowser.getHolder().reconnect();
 
 						e.printStackTrace();
@@ -274,18 +273,18 @@ public class SshFileBrowserView extends AbstractFileBrowserView {
 
 			if (sourceFs instanceof LocalFileSystem) {
 				System.out.println("Dropped: " + transferData);
-				ResponseHolder holder = new ResponseHolder();
+				FileBrowser.ResponseHolder holder = new FileBrowser.ResponseHolder();
 				if (!this.fileBrowser.selectTransferModeAndConflictAction(holder)) {
 					return false;
 				}
-				if (holder.transferMode == TransferMode.Background) {
+				if (holder.transferMode == Constants.TransferMode.BACKGROUND) {
 					this.fileBrowser.getHolder().uploadInBackground(transferData.getFiles(), this.path,
 							holder.conflictAction);
 					return true;
 				}
 				FileSystem targetFs = this.fileBrowser.getSSHFileSystem();
 				this.fileBrowser.newFileTransfer(sourceFs, targetFs, transferData.getFiles(), this.path,
-						this.hashCode(), holder.conflictAction);
+						this.hashCode(), holder.conflictAction, null);
 			} else if (sourceFs instanceof SshFileSystem && (sourceFs == this.fileBrowser.getSSHFileSystem())) {
 				System.out.println("SshFs is of same instance: " + (sourceFs == this.fileBrowser.getSSHFileSystem()));
 				if (transferData.getFiles().length > 0) {

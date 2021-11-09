@@ -69,6 +69,7 @@ public class SessionStore {
 	public static synchronized SessionFolder convertModelFromTree(DefaultMutableTreeNode node) {
 		SessionFolder folder = new SessionFolder();
 		folder.setName(node.getUserObject() + "");
+		folder.setId(((NamedItem)node.getUserObject()).getId());
 		Enumeration<TreeNode> childrens = node.children();
 		while (childrens.hasMoreElements()) {
 			DefaultMutableTreeNode c = (DefaultMutableTreeNode) childrens.nextElement();
@@ -84,6 +85,7 @@ public class SessionStore {
 	public synchronized static DefaultMutableTreeNode getNode(SessionFolder folder) {
 		NamedItem item = new NamedItem();
 		item.setName(folder.getName());
+		item.setId(folder.getId());
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(item);
 		for (SessionInfo info : folder.getItems()) {
 			DefaultMutableTreeNode c = new DefaultMutableTreeNode(info);
@@ -116,7 +118,7 @@ public class SessionStore {
 	}
 
 	private static boolean updateFavourites(SessionFolder folder, String id, List<String> localFolders,
-			List<String> remoteFolders) {
+											List<String> remoteFolders) {
 		for (SessionInfo info : folder.getItems()) {
 			if (info.id.equals(id)) {
 				if (remoteFolders != null) {

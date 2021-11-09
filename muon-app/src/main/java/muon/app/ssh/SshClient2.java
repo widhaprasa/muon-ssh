@@ -24,7 +24,6 @@ import muon.app.App;
 import muon.app.ui.components.SkinnedTextField;
 import muon.app.ui.components.session.HopEntry;
 import muon.app.ui.components.session.SessionInfo;
-import muon.app.ui.components.session.SessionInfo.JumpType;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.DirectConnection;
 import net.schmizz.sshj.connection.channel.direct.LocalPortForwarder;
@@ -42,8 +41,7 @@ import net.schmizz.sshj.userauth.method.AuthNone;
  *
  */
 public class SshClient2 implements Closeable {
-	//30000 ms
-	private static final int CONNECTION_TIMEOUT = 30000;
+	private static final int CONNECTION_TIMEOUT = App.getGlobalSettings().getConnectionTimeout()*1000;
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 	private final SessionInfo info;
 	private SSHClient sshj;
@@ -191,7 +189,7 @@ public class SshClient2 implements Closeable {
 					System.out.println("adding host key verifier");
 					this.sshj.addHostKeyVerifier(App.HOST_KEY_VERIFIER);
 					System.out.println("Host key verifier added");
-					if (this.info.getJumpType() == JumpType.TcpForwarding) {
+					if (this.info.getJumpType() == SessionInfo.JumpType.TcpForwarding) {
 						System.out.println("tcp forwarding...");
 						this.connectViaTcpForwarding();
 					} else {

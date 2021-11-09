@@ -467,7 +467,7 @@ public class SshMenuHandler {
 					popup.add(mOpenWithMenu);
 					count++;
 				}
-				
+
 				loadEditors();
 				popup.add(mEditWith);
 				count++;
@@ -594,7 +594,7 @@ public class SshMenuHandler {
 			fileBrowser.disableUi();
 			try {
 				if (fileOperations.rename(oldName, newName, fileBrowserView.getFileSystem(),
-						fileBrowserView.getSshClient())) {
+						fileBrowserView.getSshClient(),fileBrowser.getInfo().getPassword())) {
 					fileBrowserView.render(baseFolder);
 				} else {
 					fileBrowser.enableUi();
@@ -617,7 +617,7 @@ public class SshMenuHandler {
 			fileBrowser.disableUi();
 			try {
 				if (fileOperations.delete(targetList, fileBrowserView.getFileSystem(),
-						fileBrowserView.getSshClient())) {
+						fileBrowserView.getSshClient(), fileBrowser.getInfo().getPassword())) {
 					fileBrowserView.render(baseFolder);
 				} else {
 					fileBrowser.enableUi();
@@ -635,7 +635,7 @@ public class SshMenuHandler {
 			fileBrowser.disableUi();
 			try {
 				if (fileOperations.newFile(files, fileBrowserView.getFileSystem(), baseFolder,
-						fileBrowserView.getSshClient())) {
+						fileBrowserView.getSshClient(), fileBrowser.getInfo().getPassword())) {
 					fileBrowserView.render(baseFolder);
 				} else {
 					fileBrowser.enableUi();
@@ -653,7 +653,7 @@ public class SshMenuHandler {
 			fileBrowser.disableUi();
 			try {
 				if (fileOperations.newFolder(files, baseFolder, fileBrowserView.getFileSystem(),
-						fileBrowserView.getSshClient())) {
+						fileBrowserView.getSshClient(), fileBrowser.getInfo().getPassword())) {
 					fileBrowserView.render(baseFolder);
 				} else {
 					fileBrowser.enableUi();
@@ -713,7 +713,7 @@ public class SshMenuHandler {
 		boolean ret = (Toolkit.getDefaultToolkit().getSystemClipboard()
 				.isDataFlavorAvailable(DndTransferHandler.DATA_FLAVOR_DATA_FILE)
 				|| Toolkit.getDefaultToolkit().getSystemClipboard()
-						.isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
+				.isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
 		if (!ret)
 			System.out.println("Nothing on clipboard");
 		return ret;
@@ -724,7 +724,7 @@ public class SshMenuHandler {
 			fileBrowser.disableUi();
 			try {
 				if (fileOperations.copyTo(fileBrowserView.getSshClient(), files, targetFolder,
-						fileBrowserView.getFileSystem())) {
+						fileBrowserView.getFileSystem(), fileBrowser.getInfo().getPassword())) {
 					fileBrowserView.render(targetFolder);
 				} else {
 					fileBrowser.enableUi();
@@ -740,7 +740,7 @@ public class SshMenuHandler {
 			fileBrowser.disableUi();
 			try {
 				if (fileOperations.moveTo(fileBrowserView.getSshClient(), files, targetFolder,
-						fileBrowserView.getFileSystem())) {
+						fileBrowserView.getFileSystem(), fileBrowser.getInfo().getPassword())) {
 					fileBrowserView.render(targetFolder);
 				} else {
 					fileBrowser.enableUi();

@@ -1,37 +1,28 @@
 package muon.app.ui.components.session.files;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
 import muon.app.App;
 import muon.app.common.FileSystem;
 import muon.app.ui.components.ClosableTabContent;
 import muon.app.ui.components.ClosableTabbedPanel.TabTitle;
-import muon.app.ui.components.session.files.transfer.FileTransfer.ConflictAction;
-import muon.app.ui.components.session.files.transfer.FileTransfer.TransferMode;
-import muon.app.ui.components.session.files.view.AddressBar;
-import muon.app.ui.components.session.files.view.DndTransferData;
-import muon.app.ui.components.session.files.view.FolderView;
-import muon.app.ui.components.session.files.view.FolderViewEventListener;
-import muon.app.ui.components.session.files.view.OverflowMenuHandler;
+import muon.app.ui.components.session.files.view.*;
 import util.LayoutUtilities;
 import util.PathUtils;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class AbstractFileBrowserView extends JPanel implements FolderViewEventListener, ClosableTabContent {
 	protected AddressBar addressBar;
 	protected FolderView folderView;
 	protected String path;
 	protected PanelOrientation orientation;
-	private NavigationHistory history;
-	private JButton btnBack, btnNext;
-	private OverflowMenuHandler overflowMenuHandler;
+	private final NavigationHistory history;
+	private final JButton btnBack;
+	private final JButton btnNext;
+	private final OverflowMenuHandler overflowMenuHandler;
 	protected TabTitle tabTitle;
 
 //	protected TransferMode transferMode;

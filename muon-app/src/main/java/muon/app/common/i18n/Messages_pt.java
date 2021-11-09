@@ -1,6 +1,5 @@
 package muon.app.common.i18n;
 
-import javax.swing.*;
 import java.util.ListResourceBundle;
 
 public class Messages_pt extends ListResourceBundle {

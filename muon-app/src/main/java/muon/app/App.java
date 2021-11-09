@@ -18,6 +18,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import muon.app.ui.AppWindow;
+import muon.app.ui.components.session.ExternalEditorHandler;
+import muon.app.ui.components.session.SessionContentPanel;
+import muon.app.ui.components.session.SessionExportImport;
+import muon.app.ui.components.session.files.transfer.BackgroundFileTransfer;
+import muon.app.ui.laf.AppSkin;
+import muon.app.ui.laf.AppSkinDark;
+import muon.app.ui.laf.AppSkinLight;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -27,19 +35,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import muon.app.ssh.GraphicalHostKeyVerifier;
 import muon.app.ssh.GraphicalInputBlocker;
 import muon.app.ssh.InputBlocker;
-import muon.app.ui.AppWindow;
-import muon.app.ui.components.session.ExternalEditorHandler;
-import muon.app.ui.components.session.SessionContentPanel;
-import muon.app.ui.components.session.SessionExportImport;
-import muon.app.ui.components.session.files.transfer.BackgroundFileTransfer;
 import muon.app.ui.components.settings.SettingsPageName;
-import muon.app.ui.laf.AppSkin;
-import muon.app.ui.laf.AppSkinDark;
-import muon.app.ui.laf.AppSkinLight;
 import muon.app.updater.VersionEntry;
+import util.Constants;
 import util.Language;
 import util.PlatformUtils;
-import util.Win32DragHandler;
 
 import static util.Constants.APPLICATION_VERSION;
 import static util.Constants.UPDATE_URL;
@@ -83,10 +83,13 @@ public class App {
 
 	public static void main(String[] args) throws UnsupportedLookAndFeelException {
 
+		Language language= Language.ENGLISH;
+		Locale locale = new Locale(language.getLangAbbr());
 
+		bundle = ResourceBundle.getBundle("muon.app.common.i18n.Messages", locale);
 
 		Security.addProvider(new BouncyCastleProvider());
-		
+
 		Security.setProperty("networkaddress.cache.ttl", "1");
 		Security.setProperty("networkaddress.cache.negative.ttl", "1");
 		Security.setProperty("crypto.policy", "unlimited");
@@ -119,15 +122,16 @@ public class App {
 			System.out.println("Searching for known editors...done");
 		}
 
-		Language language= null;
-		if (settings.getLanguage() == null){
-			language=Language.ENGLISH;
-		} else {
-			language=settings.getLanguage();
-		}
-		Locale locale = new Locale(language.getLangAbbr());
 
-		bundle = ResourceBundle.getBundle("muon.app.common.i18n.Messages", locale);
+		if (settings.getLanguage() != null){
+			language=settings.getLanguage();
+			locale = new Locale(language.getLangAbbr());
+			bundle = ResourceBundle.getBundle("muon.app.common.i18n.Messages", locale);
+			Constants.TransferMode.update();
+			Constants.ConflictAction.update();
+
+		}
+
 
 		SKIN = settings.isUseGlobalDarkTheme() ? new AppSkinDark() : new AppSkinLight();
 
@@ -159,7 +163,7 @@ public class App {
 		SwingUtilities.invokeLater(() -> {
 			mw.setVisible(true);
 		});
-		
+
 		try {
 			File knownHostFile = new File(App.CONFIG_DIR, "known_hosts");
 			HOST_KEY_VERIFIER = new GraphicalHostKeyVerifier(knownHostFile);

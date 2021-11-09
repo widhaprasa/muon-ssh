@@ -1,32 +1,36 @@
 package muon.app;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import muon.app.ui.components.settings.DarkTerminalTheme;
+import muon.app.ui.components.settings.EditorEntry;
+import util.CollectionHelper;
+import util.Constants;
+import util.Language;
+
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import muon.app.ui.components.session.files.transfer.FileTransfer.ConflictAction;
-import muon.app.ui.components.session.files.transfer.FileTransfer.TransferMode;
-import muon.app.ui.components.settings.DarkTerminalTheme;
-import muon.app.ui.components.settings.EditorEntry;
-import util.CollectionHelper;
-import util.Language;
-
 public class Settings {
 	private boolean usingMasterPassword = false;
-	private TransferMode fileTransferMode = TransferMode.Prompt;
-	private ConflictAction conflictAction = ConflictAction.AutoRename;
+	private Constants.TransferMode fileTransferMode = Constants.TransferMode.NORMAL;
+	private Constants.ConflictAction conflictAction = Constants.ConflictAction.AUTORENAME;
 	private boolean confirmBeforeDelete = true;
 	private boolean confirmBeforeMoveOrCopy = false;
 	private boolean showHiddenFilesByDefault = false;
-	private boolean promptForSudo = true;
+	private boolean firstFileBrowserView = false;
+	private boolean transferTemporaryDirectory = false;
+	private boolean useSudo = false;
+	private boolean promptForSudo = false;
 	private boolean directoryCache = true;
 	private boolean showPathBar = true;
 	private boolean useDarkThemeForTerminal = false;
 	private boolean showMessagePrompt = false;
 	private boolean useGlobalDarkTheme = true;
 
+	private int connectionTimeout = 60;
 	private int logViewerFont = 14;
 	private boolean logViewerUseWordWrap = true;
 	private int logViewerLinesPerPage = 50;
@@ -70,9 +74,9 @@ public class Settings {
 	private boolean listViewEnabled = false;
 
 	private int defaultOpenAction = 0
-	// 0 Open with default application
-	// 1 Open with default editor
-	// 2 Open with internal editor
+			// 0 Open with default application
+			// 1 Open with default editor
+			// 2 Open with internal editor
 			, numberOfSimultaneousConnection = 3;
 
 	private double uiScaling = 1.0;
@@ -104,6 +108,14 @@ public class Settings {
 
 	public void setShowHiddenFilesByDefault(boolean showHiddenFilesByDefault) {
 		this.showHiddenFilesByDefault = showHiddenFilesByDefault;
+	}
+
+	public boolean isUseSudo() {
+		return useSudo;
+	}
+
+	public void setUseSudo(boolean useSudo) {
+		this.useSudo = useSudo;
 	}
 
 	public boolean isPromptForSudo() {
@@ -547,19 +559,19 @@ public class Settings {
 		this.backgroundTransferQueueSize = backgroundTransferQueueSize;
 	}
 
-	public TransferMode getFileTransferMode() {
+	public Constants.TransferMode getFileTransferMode() {
 		return fileTransferMode;
 	}
 
-	public void setFileTransferMode(TransferMode fileTransferMode) {
+	public void setFileTransferMode(Constants.TransferMode fileTransferMode) {
 		this.fileTransferMode = fileTransferMode;
 	}
 
-	public ConflictAction getConflictAction() {
+	public Constants.ConflictAction getConflictAction() {
 		return conflictAction;
 	}
 
-	public void setConflictAction(ConflictAction conflictAction) {
+	public void setConflictAction(Constants.ConflictAction conflictAction) {
 		this.conflictAction = conflictAction;
 	}
 
@@ -611,4 +623,57 @@ public class Settings {
 		this.listViewEnabled = listViewEnabled;
 	}
 
+	public void setTransferTemporaryDirectory(boolean transferTemporaryDirectory) {
+		this.transferTemporaryDirectory = transferTemporaryDirectory;
+	}
+
+	public boolean isTransferTemporaryDirectory() {
+		return transferTemporaryDirectory;
+	}
+
+	public boolean isFirstFileBrowserView() {
+		return firstFileBrowserView;
+	}
+
+	public void setFirstFileBrowserView(boolean firstFileBrowserView) {
+		this.firstFileBrowserView = firstFileBrowserView;
+	}
+
+	@JsonSetter("fileTransferMode")
+	public void setOldFileTransferMode(String s) {
+		if (s == null){
+			fileTransferMode=Constants.TransferMode.NORMAL;
+		} else if(s.equalsIgnoreCase("prompt")) {
+			fileTransferMode=Constants.TransferMode.NORMAL;
+		} else {
+			fileTransferMode=Constants.TransferMode.BACKGROUND;
+		}
+	}
+
+	@JsonSetter("conflictAction")
+	public void setOldConflictAction(String s) {
+
+		switch (s.toLowerCase()){
+			case "overwrite":
+				conflictAction = Constants.ConflictAction.OVERWRITE;
+				break;
+			case "autorename":
+				conflictAction = Constants.ConflictAction.AUTORENAME;
+				break;
+			case "prompt":
+				conflictAction = Constants.ConflictAction.PROMPT;
+				break;
+			default:
+				conflictAction = Constants.ConflictAction.SKIP;
+				break;
+		}
+	}
+
+	public int getConnectionTimeout() {
+		return connectionTimeout;
+	}
+
+	public void setConnectionTimeout(int connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
 }
