@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package muon.app.ui.components.session;
 
@@ -35,13 +35,13 @@ import muon.app.ui.components.session.diskspace.DiskspaceAnalyzer;
 import muon.app.ui.components.session.files.FileBrowser;
 import muon.app.ui.components.session.files.transfer.BackgroundFileTransfer;
 import muon.app.ui.components.session.files.transfer.FileTransfer;
-import muon.app.ui.components.session.files.transfer.FileTransfer.ConflictAction;
 import muon.app.ui.components.session.files.transfer.TransferProgressPanel;
 import muon.app.ui.components.session.logviewer.LogViewer;
 import muon.app.ui.components.session.processview.ProcessViewer;
 import muon.app.ui.components.session.search.SearchPanel;
 import muon.app.ui.components.session.terminal.TerminalHolder;
 import muon.app.ui.components.session.utilpage.UtilityPage;
+import util.Constants;
 import util.LayoutUtilities;
 
 /**
@@ -75,7 +75,7 @@ public class SessionContentPanel extends JPanel implements PageHolder, CachedCre
 	private PortForwardingSession pfSession;
 
 	/**
-	 * 
+	 *
 	 */
 	public SessionContentPanel(SessionInfo info) {
 		super(new BorderLayout());
@@ -100,8 +100,16 @@ public class SessionContentPanel extends JPanel implements PageHolder, CachedCre
 		processViewer = new ProcessViewer(this);
 		utilityPage = new UtilityPage(this);
 
-		Page[] pageArr = new Page[] { terminalHolder, fileBrowser , logViewer, searchPanel, diskspaceAnalyzer,
-				processViewer, utilityPage };
+		Page[] pageArr = null;
+		if (App.getGlobalSettings().isFirstFileBrowserView()){
+			pageArr = new Page[] { fileBrowser, terminalHolder , logViewer, searchPanel, diskspaceAnalyzer,
+					processViewer, utilityPage };
+		} else {
+			pageArr = new Page[] { terminalHolder, fileBrowser , logViewer, searchPanel, diskspaceAnalyzer,
+					processViewer, utilityPage };
+		}
+
+
 
 //		JPanel[] panels = {
 //				new FileBrowser(info, new AtomicBoolean(), this, null,
@@ -143,7 +151,7 @@ public class SessionContentPanel extends JPanel implements PageHolder, CachedCre
 			this.pfSession.start();
 		}
 	}
-	
+
 	public void reconnect() {
 		this.remoteSessionInstance.close();
 		this.remoteSessionInstance = new RemoteSessionInstance(info, App.getInputBlocker(), this);
@@ -285,27 +293,27 @@ public class SessionContentPanel extends JPanel implements PageHolder, CachedCre
 			}
 		});
 		EXECUTOR.shutdown();
-		
+
 		if (this.pfSession != null) {
 			this.pfSession.close();
 		}
 	}
 
-	public void uploadInBackground(FileInfo[] localFiles, String targetRemoteDirectory, ConflictAction confiAction) {
+	public void uploadInBackground(FileInfo[] localFiles, String targetRemoteDirectory, Constants.ConflictAction confiAction) {
 		RemoteSessionInstance instance = createBackgroundSession();
 		FileSystem sourceFs = new LocalFileSystem();
 		FileSystem targetFs = instance.getSshFs();
 		FileTransfer transfer = new FileTransfer(sourceFs, targetFs, localFiles, targetRemoteDirectory, null,
-				confiAction);
+				confiAction,instance);
 		App.addUpload(new BackgroundFileTransfer(transfer, instance, this));
 	}
 
-	public void downloadInBackground(FileInfo[] remoteFiles, String targetLocalDirectory, ConflictAction confiAction) {
+	public void downloadInBackground(FileInfo[] remoteFiles, String targetLocalDirectory, Constants.ConflictAction confiAction) {
 		FileSystem targetFs = new LocalFileSystem();
 		RemoteSessionInstance instance = createBackgroundSession();
 		SshFileSystem sourceFs = instance.getSshFs();
 		FileTransfer transfer = new FileTransfer(sourceFs, targetFs, remoteFiles, targetLocalDirectory, null,
-				confiAction);
+				confiAction,instance);
 		App.addDownload(new BackgroundFileTransfer(transfer, instance, this));
 	}
 

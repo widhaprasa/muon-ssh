@@ -7,8 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.*;
-import java.io.File;
-import java.util.UUID;
+import java.util.*;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,7 +15,6 @@ import javax.swing.DropMode;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,12 +30,9 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.*;
 
+import com.jcraft.jsch.Session;
 import muon.app.App;
 import muon.app.ui.components.SkinnedSplitPane;
 import muon.app.ui.components.SkinnedTextField;
@@ -134,29 +129,29 @@ public class NewSessionDlg extends JDialog implements ActionListener, TreeSelect
 		btnNewHost.putClientProperty("button.name", "btnNewHost");
 		// btnNewHost.setFont(Utility.getFont(Constants.SMALL));
 		btnNewFolder = new JButton(bundle.getString("new_folder"));// new
-													// JButton(TextHolder.getString("session.newFolder"));
+		// JButton(TextHolder.getString("session.newFolder"));
 		btnNewFolder.addActionListener(this);
 		btnNewFolder.putClientProperty("button.name", "btnNewFolder");
 		// btnNewFolder.setFont(Utility.getFont(Constants.SMALL));
 		btnDel = new JButton(bundle.getString("remove"));// new
-										// JButton(TextHolder.getString("session.remove"));
+		// JButton(TextHolder.getString("session.remove"));
 		btnDel.addActionListener(this);
 		btnDel.putClientProperty("button.name", "btnDel");
 		// btnDel.setFont(Utility.getFont(Constants.SMALL));
 		btnDup = new JButton(bundle.getString("duplicate"));// new
-											// JButton(TextHolder.getString("session.duplicate"));
+		// JButton(TextHolder.getString("session.duplicate"));
 		btnDup.addActionListener(this);
 		btnDup.putClientProperty("button.name", "btnDup");
 		// btnDup.setFont(Utility.getFont(Constants.SMALL));
 
 		btnConnect = new JButton(bundle.getString("connect"));// new
-											// JButton(TextHolder.getString("session.connect"));
+		// JButton(TextHolder.getString("session.connect"));
 		btnConnect.addActionListener(this);
 		btnConnect.putClientProperty("button.name", "btnConnect");
 		// btnConnect.setFont(Utility.getFont(Constants.SMALL));
 
 		btnCancel = new JButton(bundle.getString("cancel"));// new
-											// JButton(TextHolder.getString("session.cancel"));
+		// JButton(TextHolder.getString("session.cancel"));
 		btnCancel.addActionListener(this);
 		btnCancel.putClientProperty("button.name", "btnCancel");
 
@@ -321,6 +316,36 @@ public class NewSessionDlg extends JDialog implements ActionListener, TreeSelect
 		treeModel.nodeChanged(rootNode);
 	}
 
+	/*private void loadSessionsInfo(List<SessionInfo> sessions) {
+		this.lastSelected = stree.getLastSelection();
+		rootNode = SessionStore.getNode(stree.getFolder());
+		rootNode.setAllowsChildren(true);
+		treeModel.setRoot(rootNode);
+		try {
+			if (this.lastSelected != null) {
+				selectNode(lastSelected, rootNode);
+			} else {
+				DefaultMutableTreeNode n = null;
+				n = findFirstInfoNode(rootNode);
+				if (n == null) {
+					SessionInfo sessionInfo = new SessionInfo();
+					sessionInfo.setName(bundle.getString("new_site"));
+					sessionInfo.setId(UUID.randomUUID().toString());
+					DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(sessionInfo);
+					childNode.setUserObject(sessionInfo);
+					childNode.setAllowsChildren(false);
+					treeModel.insertNodeInto(childNode, rootNode, rootNode.getChildCount());
+					n = childNode;
+					tree.scrollPathToVisible(new TreePath(n.getPath()));
+					TreePath path = new TreePath(n.getPath());
+					tree.setSelectionPath(path);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		treeModel.nodeChanged(rootNode);
+	}*/
 	private boolean selectNode(String id, DefaultMutableTreeNode node) {
 		if (id.equals((((NamedItem) node.getUserObject()).getId()))) {
 			TreePath path = new TreePath(node.getPath());
@@ -408,97 +433,121 @@ public class NewSessionDlg extends JDialog implements ActionListener, TreeSelect
 		}
 
 		switch ((String) btn.getClientProperty("button.name")) {
-		case "btnNewHost":
-			if (parentNode == null) {
-				parentNode = rootNode;
-			}
-			Object obj = parentNode.getUserObject();
-			if (obj instanceof SessionInfo) {
-				parentNode = (DefaultMutableTreeNode) parentNode.getParent();
-				obj = parentNode.getUserObject();
-			}
-			SessionInfo sessionInfo = new SessionInfo();
-			sessionInfo.setName(bundle.getString("new_site"));
-			sessionInfo.setId(UUID.randomUUID().toString());
-			// sessionInfo.setParentId(((SessionFolder) obj).getId());
-			DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(sessionInfo);
-			childNode.setUserObject(sessionInfo);
-			childNode.setAllowsChildren(false);
-			treeModel.insertNodeInto(childNode, parentNode, parentNode.getChildCount());
-			tree.scrollPathToVisible(new TreePath(childNode.getPath()));
-			TreePath path = new TreePath(childNode.getPath());
-			tree.setSelectionPath(path);
-			// tree.startEditingAtPath(path);
-			break;
-		case "btnNewFolder":
-			if (parentNode == null) {
-				parentNode = rootNode;
-			}
-			Object objFolder = parentNode.getUserObject();
-			if (objFolder instanceof SessionInfo) {
-				parentNode = (DefaultMutableTreeNode) parentNode.getParent();
-				objFolder = parentNode.getUserObject();
-			}
-			SessionFolder folder = new SessionFolder();
-			folder.setName(bundle.getString("new_folder"));
-			DefaultMutableTreeNode childNode1 = new DefaultMutableTreeNode(folder);
-			treeModel.insertNodeInto(childNode1, parentNode, parentNode.getChildCount());
-			tree.scrollPathToVisible(new TreePath(childNode1.getPath()));
-			TreePath path2 = new TreePath(childNode1.getPath());
-			tree.setSelectionPath(path2);
-			// tree.startEditingAtPath(path2);
-			break;
-		case "btnDel":
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-			if (node != null && node.getParent() != null) {
-				DefaultMutableTreeNode sibling = node.getNextSibling();
-				if (sibling != null) {
-					String id = ((NamedItem) sibling.getUserObject()).getId();
-					selectNode(id, sibling);
-				} else {
-					DefaultMutableTreeNode parentNode1 = (DefaultMutableTreeNode) node.getParent();
-					tree.setSelectionPath(new TreePath(parentNode1.getPath()));
+			case "btnNewHost":
+				if (parentNode == null) {
+					parentNode = rootNode;
 				}
-				treeModel.removeNodeFromParent(node);
-			}
-			break;
-		case "btnDup":
-			DefaultMutableTreeNode node1 = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-			if (node1 != null && node1.getParent() != null && (node1.getUserObject() instanceof SessionInfo)) {
-				SessionInfo info = ((SessionInfo) node1.getUserObject()).copy();
-				DefaultMutableTreeNode child = new DefaultMutableTreeNode(info);
-				child.setAllowsChildren(false);
-				treeModel.insertNodeInto(child, (MutableTreeNode) node1.getParent(), node1.getParent().getChildCount());
-				selectNode(info.getId(), child);
-			}
-			break;
-		case "btnConnect":
-			connectClicked();
-			break;
-		case "btnCancel":
-			save();
-			dispose();
-			break;
-		case "btnImport":
-			if (parentNode == null) {
-				parentNode = rootNode;
-			}
-			if (parentNode.getUserObject() instanceof SessionInfo) {
-				parentNode = (DefaultMutableTreeNode) parentNode.getParent();
-			}
-			JComboBox<String> cmbImports = new JComboBox<>(
-					new String[] { "Putty", "WinSCP", "Muon session store" });
-
-			if (JOptionPane.showOptionDialog(this, new Object[] { bundle.getString("import_from"), cmbImports }, bundle.getString("import_sessions"),
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
-					null) == JOptionPane.OK_OPTION) {
-				if (cmbImports.getSelectedIndex() < 2) {
-					new ImportDlg(this, cmbImports.getSelectedIndex(), parentNode).setVisible(true);
-					treeModel.nodeStructureChanged(parentNode);
-				} else {
-					if (SessionExportImport.importSessions()) {
-						loadTree(SessionStore.load());
+				Object obj = parentNode.getUserObject();
+				if (obj instanceof SessionInfo) {
+					parentNode = (DefaultMutableTreeNode) parentNode.getParent();
+					obj = parentNode.getUserObject();
+				}
+				SessionInfo sessionInfo = new SessionInfo();
+				sessionInfo.setName(bundle.getString("new_site"));
+				sessionInfo.setId(UUID.randomUUID().toString());
+				// sessionInfo.setParentId(((SessionFolder) obj).getId());
+				DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(sessionInfo);
+				childNode.setUserObject(sessionInfo);
+				childNode.setAllowsChildren(false);
+				treeModel.insertNodeInto(childNode, parentNode, parentNode.getChildCount());
+				tree.scrollPathToVisible(new TreePath(childNode.getPath()));
+				TreePath path = new TreePath(childNode.getPath());
+				tree.setSelectionPath(path);
+				// tree.startEditingAtPath(path);
+				break;
+			case "btnNewFolder":
+				if (parentNode == null) {
+					parentNode = rootNode;
+				}
+				Object objFolder = parentNode.getUserObject();
+				if (objFolder instanceof SessionInfo) {
+					parentNode = (DefaultMutableTreeNode) parentNode.getParent();
+					objFolder = parentNode.getUserObject();
+				}
+				SessionFolder folder = new SessionFolder();
+				folder.setName(bundle.getString("new_folder"));
+				DefaultMutableTreeNode childNode1 = new DefaultMutableTreeNode(folder);
+				treeModel.insertNodeInto(childNode1, parentNode, parentNode.getChildCount());
+				tree.scrollPathToVisible(new TreePath(childNode1.getPath()));
+				TreePath path2 = new TreePath(childNode1.getPath());
+				tree.setSelectionPath(path2);
+				// tree.startEditingAtPath(path2);
+				break;
+			case "btnDel":
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				if (node != null && node.getParent() != null) {
+					DefaultMutableTreeNode sibling = node.getNextSibling();
+					if (sibling != null) {
+						String id = ((NamedItem) sibling.getUserObject()).getId();
+						selectNode(id, sibling);
+					} else {
+						DefaultMutableTreeNode parentNode1 = (DefaultMutableTreeNode) node.getParent();
+						tree.setSelectionPath(new TreePath(parentNode1.getPath()));
 					}
+					treeModel.removeNodeFromParent(node);
+				}
+				break;
+			case "btnDup":
+				DefaultMutableTreeNode node1 = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				if (node1 != null && node1.getParent() != null && (node1.getUserObject() instanceof SessionInfo)) {
+					SessionInfo info = ((SessionInfo) node1.getUserObject()).copy();
+					DefaultMutableTreeNode child = new DefaultMutableTreeNode(info);
+					child.setAllowsChildren(false);
+					treeModel.insertNodeInto(child, (MutableTreeNode) node1.getParent(), node1.getParent().getChildCount());
+					selectNode(info.getId(), child);
+				}else if (node1 != null && node1.getParent() != null && (node1.getUserObject() instanceof NamedItem)) {
+					SessionFolder newFolder = new SessionFolder();
+					newFolder.setId(UUID.randomUUID().toString());
+					newFolder.setName("Copy of " + ((NamedItem) node1.getUserObject()).getName());
+					Enumeration childrens = node1.children();
+					DefaultMutableTreeNode newFolderTree = new DefaultMutableTreeNode(newFolder);
+					while (childrens.hasMoreElements()){
+						DefaultMutableTreeNode defaultMutableTreeNode = (DefaultMutableTreeNode) childrens.nextElement();
+						if (defaultMutableTreeNode.getUserObject() instanceof SessionInfo){
+							SessionInfo newCopyInfo = ((SessionInfo)  defaultMutableTreeNode.getUserObject()).copy();
+							newCopyInfo.setName("Copy of " + newCopyInfo.getName());
+							DefaultMutableTreeNode subChild = new DefaultMutableTreeNode(newCopyInfo);
+							subChild.setAllowsChildren(false);
+							newFolderTree.add(subChild);
+						}
+					}
+					MutableTreeNode parent = (MutableTreeNode)node1.getParent();
+					//child.setAllowsChildren(false);
+					treeModel.insertNodeInto(newFolderTree, parent, node1.getParent().getChildCount());
+					selectNode(newFolder.getId(), newFolderTree);
+				}
+				break;
+			case "btnConnect":
+				connectClicked();
+				break;
+			case "btnCancel":
+				save();
+				dispose();
+				break;
+			case "btnImport":
+				if (parentNode == null) {
+					parentNode = rootNode;
+				}
+				if (parentNode.getUserObject() instanceof SessionInfo) {
+					parentNode = (DefaultMutableTreeNode) parentNode.getParent();
+				}
+				JComboBox<String> cmbImports = new JComboBox<>(
+						new String[] { "Putty", "WinSCP", "Muon session store","SSH config file" });
+
+				if (JOptionPane.showOptionDialog(this, new Object[] { bundle.getString("import_from"), cmbImports }, bundle.getString("import_sessions"),
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
+						null) == JOptionPane.OK_OPTION) {
+					if (cmbImports.getSelectedIndex() < 2) {
+						new ImportDlg(this, cmbImports.getSelectedIndex(), parentNode).setVisible(true);
+						treeModel.nodeStructureChanged(parentNode);
+					} else {
+						if (cmbImports.getSelectedIndex() ==3){
+							if (SessionExportImport.importSessionsSSHConfig()) {
+								loadTree(SessionStore.load());
+							}
+						} else if (SessionExportImport.importSessions()) {
+							loadTree(SessionStore.load());
+						}
 
 //					JFileChooser jfc = new JFileChooser();
 //					if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -512,12 +561,12 @@ public class NewSessionDlg extends JDialog implements ActionListener, TreeSelect
 ////						treeModel.setRoot(rootNode);++
 ////						treeModel.nodeStructureChanged(rootNode);
 //					}
+					}
 				}
-			}
 
-			break;
-		case "btnExport":
-			SessionExportImport.exportSessions();
+				break;
+			case "btnExport":
+				SessionExportImport.exportSessions();
 //			JFileChooser jfc = new JFileChooser();
 //			if (jfc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 //				String id = null;
@@ -529,9 +578,9 @@ public class NewSessionDlg extends JDialog implements ActionListener, TreeSelect
 //				}
 //				SessionStore.save(SessionStore.convertModelFromTree(rootNode), id, jfc.getSelectedFile());
 //			}
-			break;
-		default:
-			break;
+				break;
+			default:
+				break;
 		}
 	}
 

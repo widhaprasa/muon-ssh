@@ -12,7 +12,6 @@ import util.PathUtils;
 import util.SudoUtils;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,17 +24,17 @@ public class SshFileOperations {
 	}
 
 	public boolean runScriptInBackground(RemoteSessionInstance instance,
-			String command, AtomicBoolean stopFlag) throws Exception {
+										 String command, AtomicBoolean stopFlag) throws Exception {
 		System.out.println("Invoke command: " + command);
 		StringBuilder output = new StringBuilder();
 		boolean ret = instance.exec(command, stopFlag, output,
 				new StringBuilder()) == 0;
-		System.out.println("output: " + output.toString());
+		System.out.println("output: " + output);
 		return ret;
 	}
 
 	public boolean moveTo(RemoteSessionInstance instance, List<FileInfo> files,
-			String targetFolder, FileSystem fs) throws Exception {
+						  String targetFolder, FileSystem fs, String password) throws Exception {
 		List<FileInfo> fileList = fs.list(targetFolder);
 		List<FileInfo> dupList = new ArrayList<>();
 		for (FileInfo file : files) {
@@ -51,8 +50,8 @@ public class SshFileOperations {
 			JComboBox<String> cmbs = new JComboBox<>(
 					new String[] { "Auto rename", "Overwrite" });
 			if (JOptionPane.showOptionDialog(null, new Object[] {
-					"Some file with the same name already exists. Please choose an action",
-					cmbs }, "Action required", JOptionPane.YES_NO_OPTION,
+							"Some file with the same name already exists. Please choose an action",
+							cmbs }, "Action required", JOptionPane.YES_NO_OPTION,
 					JOptionPane.PLAIN_MESSAGE, null, null,
 					null) == JOptionPane.YES_OPTION) {
 				action = cmbs.getSelectedIndex();
@@ -73,7 +72,7 @@ public class SshFileOperations {
 			if (dupList.contains(fileInfo) && action == 0) {
 				command.append("\""
 						+ PathUtils.combineUnix(targetFolder,
-								getUniqueName(fileList, fileInfo.getName()))
+						getUniqueName(fileList, fileInfo.getName()))
 						+ "\"; ");
 			} else {
 				command.append("\"" + PathUtils.combineUnix(targetFolder,
@@ -83,24 +82,28 @@ public class SshFileOperations {
 
 		System.out.println("Move: " + command);
 		if (instance.exec(command.toString(), new AtomicBoolean(false)) != 0) {
+			if (!App.getGlobalSettings().isUseSudo()){
+				JOptionPane.showMessageDialog(null, "Access denied");
+				return false;
+			}
 
 			if (!App.getGlobalSettings().isPromptForSudo()
 					|| JOptionPane.showConfirmDialog(null,
-							"Access denied, rename using sudo?", "Use sudo?",
-							JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+					"Access denied, rename using sudo?", "Use sudo?",
+					JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
 				if (!instance.isSessionClosed()) {
 					JOptionPane.showMessageDialog(null, "Operation failed");
 				}
 				return false;
 			}
 
-			int ret = SudoUtils.runSudo(command.toString(), instance);
-			if (ret == -1) {
-				if (!instance.isSessionClosed()) {
-					JOptionPane.showMessageDialog(null, "Operation failed");
-				}
-			} else {
+			int ret = SudoUtils.runSudo(command.toString(), instance, password);
+			if (ret != -1) {
 				return ret == 0;
+			}
+
+			if (!instance.isSessionClosed()) {
+				JOptionPane.showMessageDialog(null, "Operation failed");
 			}
 		} else {
 			return true;
@@ -109,7 +112,7 @@ public class SshFileOperations {
 	}
 
 	public boolean copyTo(RemoteSessionInstance instance, List<FileInfo> files,
-			String targetFolder, FileSystem fs) throws Exception {
+						  String targetFolder, FileSystem fs, String password) throws Exception {
 		List<FileInfo> fileList = fs.list(targetFolder);
 		List<FileInfo> dupList = new ArrayList<>();
 		for (FileInfo file : files) {
@@ -125,8 +128,8 @@ public class SshFileOperations {
 			JComboBox<String> cmbs = new JComboBox<>(
 					new String[] { "Auto rename", "Overwrite" });
 			if (JOptionPane.showOptionDialog(null, new Object[] {
-					"Some file with the same name already exists. Please choose an action",
-					cmbs }, "Action required", JOptionPane.YES_NO_OPTION,
+							"Some file with the same name already exists. Please choose an action",
+							cmbs }, "Action required", JOptionPane.YES_NO_OPTION,
 					JOptionPane.PLAIN_MESSAGE, null, null,
 					null) == JOptionPane.YES_OPTION) {
 				action = cmbs.getSelectedIndex();
@@ -147,7 +150,7 @@ public class SshFileOperations {
 			if (dupList.contains(fileInfo) && action == 0) {
 				command.append("\""
 						+ PathUtils.combineUnix(targetFolder,
-								getUniqueName(fileList, fileInfo.getName()))
+						getUniqueName(fileList, fileInfo.getName()))
 						+ "\"; ");
 			} else {
 				command.append("\"" + PathUtils.combineUnix(targetFolder,
@@ -157,22 +160,27 @@ public class SshFileOperations {
 
 		System.out.println("Copy: " + command);
 		if (instance.exec(command.toString(), new AtomicBoolean(false)) != 0) {
+			if (!App.getGlobalSettings().isUseSudo()){
+				JOptionPane.showMessageDialog(null, "Access denied");
+				return false;
+			}
 			if (!App.getGlobalSettings().isPromptForSudo()
 					|| JOptionPane.showConfirmDialog(null,
-							"Access denied, rename using sudo?", "Use sudo?",
-							JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+					"Access denied, copy using sudo?", "Use sudo?",
+					JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
 				if (!instance.isSessionClosed()) {
 					JOptionPane.showMessageDialog(null, "Operation failed");
 				}
 				return false;
 			}
-			int ret = SudoUtils.runSudo(command.toString(), instance);
-			if (ret == -1) {
-				if (!instance.isSessionClosed()) {
-					JOptionPane.showMessageDialog(null, "Operation failed");
-				}
-			} else {
+
+			int ret = SudoUtils.runSudo(command.toString(), instance, password);
+			if (ret != -1) {
 				return ret == 0;
+			}
+
+			if (!instance.isSessionClosed()) {
+				JOptionPane.showMessageDialog(null, "Operation failed");
 			}
 		} else {
 			return true;
@@ -197,17 +205,27 @@ public class SshFileOperations {
 	}
 
 	public boolean rename(String oldName, String newName, FileSystem fs,
-			RemoteSessionInstance instance) {
+						  RemoteSessionInstance instance, String password) {
 		try {
 			fs.rename(oldName, newName);
 			return true;
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
-			if (App.getGlobalSettings().isPromptForSudo()
-					&& JOptionPane.showConfirmDialog(null,
-							"Access denied, rename using sudo?", "Use sudo?",
-							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				return renameWithPrivilege(oldName, newName, instance);
+
+			if (!App.getGlobalSettings().isUseSudo()){
+				JOptionPane.showMessageDialog(null, "Access denied");
+				return false;
+			}
+
+			if (!App.getGlobalSettings().isPromptForSudo()
+					|| JOptionPane.showConfirmDialog(null,
+					"Access denied, rename using sudo?", "Use sudo?",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				return renameWithPrivilege(oldName, newName, instance, password);
+			}
+
+			if (!instance.isSessionClosed()) {
+				JOptionPane.showMessageDialog(null, "Operation failed");
 			}
 			return false;
 		} catch (Exception e) {
@@ -219,12 +237,13 @@ public class SshFileOperations {
 		}
 	}
 
+
 	private boolean renameWithPrivilege(String oldName, String newName,
-			RemoteSessionInstance instance) {
+										RemoteSessionInstance instance, String password) {
 		StringBuilder command = new StringBuilder();
 		command.append("mv \"" + oldName + "\" \"" + newName + "\"");
 		System.out.println("Invoke sudo: " + command);
-		int ret = SudoUtils.runSudo(command.toString(), instance);
+		int ret = SudoUtils.runSudo(command.toString(), instance, password);
 		if (ret == -1) {
 			if (!instance.isSessionClosed()) {
 				JOptionPane.showMessageDialog(null, "Operation failed");
@@ -234,7 +253,7 @@ public class SshFileOperations {
 	}
 
 	public boolean delete(FileInfo[] targetList, FileSystem fs,
-			RemoteSessionInstance instance) {
+						  RemoteSessionInstance instance, String password) {
 		try {
 			try {
 				delete(Arrays.asList(targetList), instance);
@@ -252,19 +271,27 @@ public class SshFileOperations {
 			}
 		} catch (FileNotFoundException | AccessDeniedException e) {
 			e.printStackTrace();
-			if (!App.getGlobalSettings().isPromptForSudo()
-					|| JOptionPane.showConfirmDialog(null,
-							"Access denied, rename using sudo?", "Use sudo?",
-							JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+			if (!App.getGlobalSettings().isUseSudo()){
+				JOptionPane.showMessageDialog(null, "Access denied");
 				return false;
 			}
-			return deletePrivilege(targetList, instance);
+			if (!App.getGlobalSettings().isPromptForSudo()
+					|| JOptionPane.showConfirmDialog(null,
+					"Access denied, delete using sudo?", "Use sudo?",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				return deletePrivilege(targetList, instance,password);
+			}
+			if (!instance.isSessionClosed()) {
+				JOptionPane.showMessageDialog(null, "Operation failed");
+			}
+			return false;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (!instance.isSessionClosed()) {
 				JOptionPane.showMessageDialog(null, "Error deleting file");// JOptionPane.showMessageDialog(null,
-																			// "Operation
-																			// failed");
+				// "Operation
+				// failed");
 			}
 
 			return false;
@@ -272,14 +299,14 @@ public class SshFileOperations {
 	}
 
 	private boolean deletePrivilege(FileInfo[] targetList,
-			RemoteSessionInstance instance) {
+									RemoteSessionInstance instance, String password) {
 		StringBuilder sb = new StringBuilder("rm -rf ");
 		for (FileInfo file : targetList) {
 			sb.append("\"" + file.getPath() + "\" ");
 		}
 
-		System.out.println("Invoke sudo: " + sb.toString());
-		int ret = SudoUtils.runSudo(sb.toString(), instance);
+		System.out.println("Invoke sudo: " + sb);
+		int ret = SudoUtils.runSudo(sb.toString(), instance, password);
 		if (ret == -1) {
 			JOptionPane.showMessageDialog(null, "Operation failed");
 		}
@@ -287,7 +314,7 @@ public class SshFileOperations {
 	}
 
 	public boolean newFile(FileInfo[] files, FileSystem fs, String folder,
-			RemoteSessionInstance instance) {
+						   RemoteSessionInstance instance, String password) {
 		String text = JOptionPane.showInputDialog("New file");
 		if (text == null || text.length() < 1) {
 			return false;
@@ -309,18 +336,27 @@ public class SshFileOperations {
 			return true;
 		} catch (AccessDeniedException e1) {
 			e1.printStackTrace();
+			if (!App.getGlobalSettings().isUseSudo()){
+				JOptionPane.showMessageDialog(null, "Access denied");
+				return false;
+			}
 			if (!App.getGlobalSettings().isPromptForSudo()
 					|| JOptionPane.showConfirmDialog(null,
-							"Access denied, rename using sudo?", "Use sudo?",
-							JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-				return false;
-			}
-			if (!touchWithPrivilege(folder, text, instance)) {
-				if (!instance.isSessionClosed()) {
-					JOptionPane.showMessageDialog(null, "Operation failed");
+					"Access denied, new file using sudo?", "Use sudo?",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				if (!touchWithPrivilege(folder, text, instance, password)) {
+					if (!instance.isSessionClosed()) {
+						JOptionPane.showMessageDialog(null, "Operation failed");
+					}
+					return false;
 				}
-				return false;
+				return true;
 			}
+			if (!instance.isSessionClosed()) {
+				JOptionPane.showMessageDialog(null, "Operation failed");
+			}
+
+			return false;
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			if (!instance.isSessionClosed()) {
@@ -331,12 +367,12 @@ public class SshFileOperations {
 	}
 
 	private boolean touchWithPrivilege(String path, String newFile,
-			RemoteSessionInstance instance) {
+									   RemoteSessionInstance instance, String password) {
 		String file = PathUtils.combineUnix(path, newFile);
 		StringBuilder command = new StringBuilder();
 		command.append("touch \"" + file + "\"");
 		System.out.println("Invoke sudo: " + command);
-		int ret = SudoUtils.runSudo(command.toString(), instance);
+		int ret = SudoUtils.runSudo(command.toString(), instance,password);
 		if (ret == -1) {
 			if (!instance.isSessionClosed()) {
 				JOptionPane.showMessageDialog(null, "Operation failed");
@@ -346,7 +382,7 @@ public class SshFileOperations {
 	}
 
 	public boolean newFolder(FileInfo[] files, String folder, FileSystem fs,
-			RemoteSessionInstance instance) {
+							 RemoteSessionInstance instance, String password) {
 		String text = JOptionPane.showInputDialog("New folder name");
 		if (text == null || text.length() < 1) {
 			return false;
@@ -368,21 +404,27 @@ public class SshFileOperations {
 			return true;
 		} catch (AccessDeniedException e1) {
 			e1.printStackTrace();
+			if (!App.getGlobalSettings().isUseSudo()){
+				JOptionPane.showMessageDialog(null, "Access denied");
+				return false;
+			}
 			if (!App.getGlobalSettings().isPromptForSudo()
-					|| JOptionPane.showConfirmDialog(null,
-							"Access denied, try using sudo?", "Use sudo?",
-							JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-				if (!instance.isSessionClosed()) {
-					JOptionPane.showMessageDialog(null, "Operation failed");
+					||  JOptionPane.showConfirmDialog(null,
+					"Access denied, try using sudo?", "Use sudo?",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				if (!mkdirWithPrivilege(folder, text, instance, password)) {
+					if (!instance.isSessionClosed()) {
+						JOptionPane.showMessageDialog(null, "Operation failed");
+					}
+					return false;
 				}
-				return false;
+				return true;
 			}
-			if (!mkdirWithPrivilege(folder, text, instance)) {
-				if (!instance.isSessionClosed()) {
-					JOptionPane.showMessageDialog(null, "Operation failed");
-				}
-				return false;
+			if (!instance.isSessionClosed()) {
+				JOptionPane.showMessageDialog(null, "Operation failed");
 			}
+			return false;
+
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			if (!instance.isSessionClosed()) {
@@ -393,12 +435,12 @@ public class SshFileOperations {
 	}
 
 	private boolean mkdirWithPrivilege(String path, String newFolder,
-			RemoteSessionInstance instance) {
+									   RemoteSessionInstance instance, String password) {
 		String file = PathUtils.combineUnix(path, newFolder);
 		StringBuilder command = new StringBuilder();
 		command.append("mkdir \"" + file + "\"");
 		System.out.println("Invoke sudo: " + command);
-		int ret = SudoUtils.runSudo(command.toString(), instance);
+		int ret = SudoUtils.runSudo(command.toString(), instance, password);
 		if (ret == -1 && !instance.isSessionClosed()) {
 			JOptionPane.showMessageDialog(null, "Operation failed");
 		}
@@ -406,11 +448,11 @@ public class SshFileOperations {
 	}
 
 	public boolean createLink(FileInfo[] files, FileSystem fs,
-			RemoteSessionInstance instance) {
+							  RemoteSessionInstance instance) {
 		JTextField txtLinkName = new SkinnedTextField(30);// new
-															// JTextField(30);
+		// JTextField(30);
 		JTextField txtFileName = new SkinnedTextField(30);// new
-															// JTextField(30);
+		// JTextField(30);
 		JCheckBox chkHardLink = new JCheckBox("Hardlink");
 
 		if (files.length > 0) {
@@ -437,7 +479,7 @@ public class SshFileOperations {
 	}
 
 	private boolean createLinkAsync(String src, String dst, boolean hardLink,
-			FileSystem fs) {
+									FileSystem fs) {
 		try {
 			fs.createLink(src, dst, hardLink);
 			return true;
@@ -448,7 +490,7 @@ public class SshFileOperations {
 	}
 
 	public static void delete(List<FileInfo> files,
-			RemoteSessionInstance instance) throws Exception {
+							  RemoteSessionInstance instance) throws Exception {
 
 		StringBuilder sb = new StringBuilder("rm -rf ");
 

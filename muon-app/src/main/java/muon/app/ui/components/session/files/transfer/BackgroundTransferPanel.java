@@ -22,9 +22,9 @@ import muon.app.App;
 import util.FontAwesomeContants;
 
 public class BackgroundTransferPanel extends JPanel {
-	private Box verticalBox;
-	private AtomicInteger transferCount = new AtomicInteger(0);
-	private Consumer<Integer> callback;
+	private final Box verticalBox;
+	private final AtomicInteger transferCount = new AtomicInteger(0);
+	private final Consumer<Integer> callback;
 
 	/**
 	 * @param callback callback for notifying number of active transfers
@@ -95,9 +95,9 @@ public class BackgroundTransferPanel extends JPanel {
 //	}
 
 	class TransferPanelItem extends JPanel implements FileTransferProgress {
-		private BackgroundFileTransfer fileTransfer;
-		private JProgressBar progressBar;
-		private JLabel progressLabel;
+		private final BackgroundFileTransfer fileTransfer;
+		private final JProgressBar progressBar;
+		private final JLabel progressLabel;
 		private Future<?> handle;
 
 		public void stop() {
@@ -148,7 +148,7 @@ public class BackgroundTransferPanel extends JPanel {
 
 		@Override
 		public void progress(long processedBytes, long totalBytes, long processedCount, long totalCount,
-				FileTransfer fileTransfer) {
+							 FileTransfer fileTransfer) {
 			SwingUtilities.invokeLater(() -> {
 				progressBar.setValue(totalBytes > 0 ? ((int) ((processedBytes * 100) / totalBytes)) : 0);
 			});
