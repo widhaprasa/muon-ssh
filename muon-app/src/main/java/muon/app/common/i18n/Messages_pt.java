@@ -85,7 +85,7 @@ public class Messages_pt extends ListResourceBundle {
             {"confirm_delete_files", "Confirme antes de excluir arquivos"},
             {"confirm_move_files", "Confirme antes de mover ou copiar arquivos"},
             {"show_hidden_files", "Mostrar arquivos ocultos por padrão"},
-            {"prompt_for_sudo", "Peça sudo se a operação falhar devido a permissões (cuidado!)"},
+            {"prompt_for_sudo", "Peça sudo se a operação falhar devido a permissões"},
             {"directory_caching", "Usar cache de diretório"},
             {"current_folder", "Mostra a pasta atual na barra de caminho"},
             {"show_banner", "Mostrar banner"},

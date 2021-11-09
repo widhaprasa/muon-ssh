@@ -85,7 +85,7 @@ public class Messages_es extends ListResourceBundle {
             {"confirm_delete_files", "Confirmar antes de eliminar archivos"},
             {"confirm_move_files", "Confirmar antes de mover o copiar archivos"},
             {"show_hidden_files", "Mostrar archivos ocultos por defecto"},
-            {"prompt_for_sudo", "Preguntar por sudo si la operacion falla debido a permisos (cuidado!)"},
+            {"prompt_for_sudo", "Preguntar por sudo si la operacion falla debido a permisos"},
             {"directory_caching", "Usar caching de directorios"},
             {"current_folder", "Mostrar carpeta actual en la ruta de la barra"},
             {"show_banner", "Mostrar banner"},
@@ -268,6 +268,5 @@ public class Messages_es extends ListResourceBundle {
             {"transfer_temporary_directory", "Transfiera archivos al directorio temporal cuando la operación falla debido a problemas de permisos"},
             {"show_filebrowser_first", "Mostrar primero la pestaña Explorador de archivos"},
             {"connection_timeout", "Tiempo limite de conexion"}
-
     };
 }
