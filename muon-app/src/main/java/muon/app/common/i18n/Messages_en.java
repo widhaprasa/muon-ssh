@@ -85,7 +85,7 @@ public class Messages_en extends ListResourceBundle {
             {"confirm_delete_files", "Confirm before deleting files"},
             {"confirm_move_files",  "Confirm before moving or copying files"},
             {"show_hidden_files", "Show hidden files by default"},
-            {"prompt_for_sudo", "Prompt for sudo if operation fails due to permission issues (carefull!)"},
+            {"prompt_for_sudo", "Prompt for sudo if operation fails due to permission issues"},
             {"directory_caching",  "Use directory caching"},
             {"current_folder", "Show current folder in path bar style"},
             {"show_banner", "Show banner"},
@@ -117,7 +117,7 @@ public class Messages_en extends ListResourceBundle {
             {"select_all", "Select All"},
             {"clear_buffer", "Clear buffer"},
             {"find", "Encontrar"},
-            {"cut", "Cut"},
+            {"cut", "Cortar"},
             {"path_executable", "Path to executable"},
             {"file_browser", "File browser"},
             {"server_logs", "Server logs"},
@@ -262,14 +262,7 @@ public class Messages_en extends ListResourceBundle {
             {"language", "Language"},
             {"log_viewer_lines", "Log viewer lines per page" },
             {"log_viewer_font_size", "Log viewer font size"},
-            {"system_refresh_interval", "System load refresh interval (sec) "},
-            {"autorename", "Autorename"},
-            {"use_sudo_if_fails", "Use sudo if the operation fails due to permissions issues (carefull!)"},
-            {"transfer_temporary_directory", "Transfer files to temporary directory when operation fails due to permission issues"},
-            {"show_filebrowser_first", "Show FileBrowser tab first"},
-            {"connection_timeout", "Connection timeout"}
-
-
+            {"system_refresh_interval", "System load refresh interval (sec) "}
 
 
     };
