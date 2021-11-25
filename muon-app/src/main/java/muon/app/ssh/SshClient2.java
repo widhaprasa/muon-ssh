@@ -24,6 +24,8 @@ import muon.app.App;
 import muon.app.ui.components.SkinnedTextField;
 import muon.app.ui.components.session.HopEntry;
 import muon.app.ui.components.session.SessionInfo;
+import net.schmizz.keepalive.KeepAliveProvider;
+import net.schmizz.sshj.DefaultConfig;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.DirectConnection;
 import net.schmizz.sshj.connection.channel.direct.LocalPortForwarder;
@@ -45,6 +47,7 @@ public class SshClient2 implements Closeable {
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 	private final SessionInfo info;
 	private SSHClient sshj;
+	private DefaultConfig defaultConfig;
 	private final PasswordFinderDialog passwordFinder;
 	private final InputBlocker inputBlocker;
 	private final CachedCredentialProvider cachedCredentialProvider;
@@ -175,7 +178,13 @@ public class SshClient2 implements Closeable {
 	private void connect(Deque<HopEntry> hopStack) throws IOException, OperationCancelledException {
 		this.inputBlocker.blockInput();
 		try {
-			sshj = new SSHClient();
+			defaultConfig = new DefaultConfig();
+			if(App.getGlobalSettings().isShowMessagePrompt()){
+				System.out.println("enabled KeepAliveProvider");
+        		defaultConfig.setKeepAliveProvider(KeepAliveProvider.KEEP_ALIVE);
+        	}
+			sshj = new SSHClient(defaultConfig);
+			
 			sshj.setConnectTimeout(CONNECTION_TIMEOUT);
 			sshj.setTimeout(CONNECTION_TIMEOUT);
 			if (hopStack.isEmpty()) {
@@ -204,7 +213,7 @@ public class SshClient2 implements Closeable {
 			}
 
 			// sshj.setRemoteCharset(remoteCharset);
-
+			sshj.getConnection().getKeepAlive().setKeepAliveInterval(5);
 			if (closed.get()) {
 				disconnect();
 				throw new OperationCancelledException();
