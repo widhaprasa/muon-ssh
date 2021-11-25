@@ -31,6 +31,7 @@ public class Settings {
 	private boolean useGlobalDarkTheme = true;
 
 	private int connectionTimeout = 60;
+	private boolean connectionKeepAlive = false;
 	private int logViewerFont = 14;
 	private boolean logViewerUseWordWrap = true;
 	private int logViewerLinesPerPage = 50;
@@ -164,6 +165,14 @@ public class Settings {
 
 	public void setShowMessagePrompt(boolean showMessagePrompt) {
 		this.showMessagePrompt = showMessagePrompt;
+	}
+
+	public boolean isConnectionKeepAlive() {
+		return connectionKeepAlive;
+	}
+
+	public void setConnectionKeepAlive(boolean connectionKeepAlive) {
+		this.connectionKeepAlive = connectionKeepAlive;
 	}
 
 	public int getDefaultOpenAction() {
