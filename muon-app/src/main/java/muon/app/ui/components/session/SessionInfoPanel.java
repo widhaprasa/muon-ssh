@@ -21,6 +21,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -30,6 +31,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import muon.app.ui.components.SkinnedTextField;
+import muon.app.ui.components.SkinnedTextArea;
 import muon.app.ui.components.TabbedPanel;
 import muon.app.ui.components.session.SessionInfo.JumpType;
 
@@ -48,6 +50,7 @@ public class SessionInfoPanel extends JPanel {
 	private JTextField inpKeyFile;
 	private JButton inpLocalBrowse;
 	private JButton inpKeyBrowse;
+	private JButton inpKeyShowPass;
 	private JLabel lblHost, lblPort, lblUser, lblPass, lblLocalFolder, lblRemoteFolder, lblKeyFile, lblProxyType,
 			lblProxyHost, lblProxyPort, lblProxyUser, lblProxyPass;
 	private SpinnerNumberModel portModel, proxyPortModel;
@@ -728,6 +731,15 @@ public class SessionInfoPanel extends JPanel {
 				inpKeyFile.setText(jfc.getSelectedFile().getAbsolutePath());
 			}
 		});
+		
+		inpKeyShowPass = new JButton(bundle.getString("show"));
+		inpKeyShowPass.addActionListener(e -> {
+			SkinnedTextArea ta = new SkinnedTextArea();
+			ta.setText(inpPassword.getText());
+			ta.setEditable(false);
+			ta.setLineWrap(false);;
+			JOptionPane.showMessageDialog(this, ta,bundle.getString("password"), JOptionPane.PLAIN_MESSAGE);
+		});
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1;
@@ -781,9 +793,17 @@ public class SessionInfoPanel extends JPanel {
 
 		c.gridx = 0;
 		c.gridy = 8;
-		c.gridwidth = 2;
+		c.gridwidth = 1;
 		c.insets = noInset;
+		c.weightx = 1;
 		panel.add(inpPassword, c);
+
+		c.gridx = 1;
+		c.gridy = 8;
+		c.gridwidth = 1;
+		c.weightx = 0;
+		c.insets = new Insets(5, 0, 0, 8);
+		panel.add(inpKeyShowPass, c);
 
 		c.gridx = 0;
 		c.gridy = 9;
@@ -795,7 +815,7 @@ public class SessionInfoPanel extends JPanel {
 		c.gridy = 10;
 		c.gridwidth = 1;
 		c.insets = noInset;
-		c.weightx = 1;
+		c.weightx = 2;
 		panel.add(inpKeyFile, c);
 
 		c.gridx = 1;

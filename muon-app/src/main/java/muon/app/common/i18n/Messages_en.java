@@ -268,7 +268,7 @@ public class Messages_en extends ListResourceBundle {
             {"transfer_temporary_directory", "Transfer files to temporary directory when operation fails due to permission issues"},
             {"show_filebrowser_first", "Show FileBrowser tab first"},
             {"connection_timeout", "Connection timeout"},
+            {"show", "Show"},
             {"keep_alive", "Keep connection alive"}
-
     };
 }
