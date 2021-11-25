@@ -40,7 +40,7 @@ public class SettingsDialog extends JDialog {
 	private JCheckBox chkConfirmBeforeDelete, chkConfirmBeforeMoveOrCopy, chkShowHiddenFilesByDefault, chkFirstFileBrowserView,
 			chkUseSudo, chkPromptForSudo,chkTransferTemporaryDirectory,
 			chkDirectoryCache, chkShowPathBar, chkConfirmBeforeTerminalClosing, chkShowMessagePrompt,
-			chkUseGlobalDarkTheme;
+			chkUseGlobalDarkTheme,spConnectionKeepAlive;
 	private KeyShortcutComponent[] kcc;
 
 	private JCheckBox chkLogWrap;
@@ -408,6 +408,9 @@ public class SettingsDialog extends JDialog {
 		chkLogWrap = new JCheckBox(App.bundle.getString("word_wrap"));
 		spLogLinesPerPage = new JSpinner(new SpinnerNumberModel(50, 10, 500, 1));
 		spConnectionTimeout = new JSpinner(new SpinnerNumberModel(60, 30, 300, 5));
+
+		spConnectionKeepAlive = new JCheckBox(App.bundle.getString("keep_alive"));
+		
 		spLogFontSize = new JSpinner(new SpinnerNumberModel(14, 5, 500, 1));
 
 		spSysLoadInterval = new JSpinner(new SpinnerNumberModel(3, 1, Short.MAX_VALUE, 1));
@@ -446,6 +449,7 @@ public class SettingsDialog extends JDialog {
 		chkLogWrap.setAlignmentX(Box.LEFT_ALIGNMENT);
 		spLogLinesPerPage.setAlignmentX(Box.LEFT_ALIGNMENT);
 		spConnectionTimeout.setAlignmentX(Box.LEFT_ALIGNMENT);
+		spConnectionKeepAlive.setAlignmentX(Box.LEFT_ALIGNMENT);
 		spLogFontSize.setAlignmentX(Box.LEFT_ALIGNMENT);
 		spSysLoadInterval.setAlignmentX(Box.LEFT_ALIGNMENT);
 
@@ -500,6 +504,10 @@ public class SettingsDialog extends JDialog {
 		vbox.add(Box.createRigidArea(new Dimension(10, 10)));
 		vbox.add(createRow(lbl1, Box.createHorizontalGlue(), spConnectionTimeout));
 		vbox.add(Box.createRigidArea(new Dimension(10, 10)));
+		
+		vbox.add(spConnectionKeepAlive);
+		vbox.add(Box.createRigidArea(new Dimension(10, 20)));
+
 		vbox.add(createRow(lbl2, Box.createHorizontalGlue(), spLogFontSize));
 		vbox.add(Box.createRigidArea(new Dimension(10, 10)));
 		vbox.add(createRow(lbl3, Box.createHorizontalGlue(), spSysLoadInterval));
@@ -603,6 +611,7 @@ public class SettingsDialog extends JDialog {
 		settings.setUseGlobalDarkTheme(chkUseGlobalDarkTheme.isSelected());
 
 		settings.setConnectionTimeout((Integer) spConnectionTimeout.getValue());
+		settings.setConnectionKeepAlive(spConnectionKeepAlive.isSelected());
 		settings.setLogViewerFont((Integer) spLogFontSize.getValue());
 		settings.setLogViewerLinesPerPage((Integer) spLogLinesPerPage.getValue());
 		settings.setLogViewerUseWordWrap(chkLogWrap.isSelected());
@@ -696,6 +705,7 @@ public class SettingsDialog extends JDialog {
 		chkUseGlobalDarkTheme.setSelected(settings.isUseGlobalDarkTheme());
 
 		spConnectionTimeout.setValue(settings.getConnectionTimeout());
+		spConnectionKeepAlive.setSelected(settings.isConnectionKeepAlive());
 		spLogFontSize.setValue(settings.getLogViewerFont());
 		spLogLinesPerPage.setValue(settings.getLogViewerLinesPerPage());
 		chkLogWrap.setSelected(settings.isLogViewerUseWordWrap());
