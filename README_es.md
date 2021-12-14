@@ -1,8 +1,8 @@
 # Muon SSH Terminal/SFTP client ( Formerly Snowflake ) ![Java CI](https://github.com/subhra74/snowflake/workflows/Java%20CI/badge.svg?branch=master) [![Github All Releases](https://img.shields.io/github/downloads/subhra74/snowflake/total.svg)]()
 
-<a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">Español</a>
-<a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">English</a>
-<a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">Portuguese</a>
+<a href="https://github.com/devlinx9/muon-ssh/blob/master/README_es.md">Español</a>
+<a href="https://github.com/devlinx9/muon-ssh/blob/master/README.md">English</a>
+<a href="https://github.com/devlinx9/muon-ssh/blob/master/README_pt.md">Portuguese</a>
 
 Una forma fácil y divertida de trabajar con servidores remotos a través de SSH. Este proyecto fue renombrado a Muon debido a que su nombre anterior "Snowflake" es confuso ya que existe un producto popular con el mismo nombre. Muon es un cliente SSH gráfico. Tiene un navegador de archivos SFTP mejorado, un emulador de terminal SSH, un administrador de procesos de recursos remotos, un analizador de espacio en disco del servidor, un editor de texto remoto, un enorme visor de registros remotos y muchas otras herramientas útiles, lo que facilita el trabajo con servidores remotos. Muon proporciona una funcionalidad similar a los paneles de control basados ​​en la web, pero funciona a través de SSH desde la computadora local, por lo que no se requiere instalación en el servidor. Funciona en Linux y Windows. Muon ha sido probado con varios servidores Linux y UNIX, como el servidor Ubuntu, CentOS, RHEL, OpenSUSE, FreeBSD, OpenBSD, NetBSD y HP-UX.
 
