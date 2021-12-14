@@ -125,6 +125,12 @@ public class AppWindow extends JFrame {
 			}
 		}).start();
 	}
+	public void createFirstSessionPanel(){
+		SessionInfo info = new NewSessionDlg(this).newSession();
+		if (info != null) {
+			sessionListPanel.createSession(info);
+		}
+	}
 
 	private JPanel createSessionPanel() {
 		JLabel lblSession = new JLabel(bundle.getString("sessions"));
@@ -132,10 +138,7 @@ public class AppWindow extends JFrame {
 		JButton btnNew = new JButton(bundle.getString("add"));
 		btnNew.setFont(App.SKIN.getDefaultFont().deriveFont(12.0f));
 		btnNew.addActionListener(e -> {
-			SessionInfo info = new NewSessionDlg(this).newSession();
-			if (info != null) {
-				sessionListPanel.createSession(info);
-			}
+			this.createFirstSessionPanel();
 		});
 
 		JButton btnSettings = new JButton();

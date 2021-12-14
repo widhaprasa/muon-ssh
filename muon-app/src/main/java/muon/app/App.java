@@ -172,6 +172,7 @@ public class App {
 			e2.printStackTrace();
 		}
 
+		mw.createFirstSessionPanel();
 	}
 
 	public synchronized static void loadSettings() {

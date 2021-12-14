@@ -267,6 +267,8 @@ public class Messages_pt extends ListResourceBundle {
             {"use_sudo_if_fails", "Use sudo se a operação falhou devido a permissões (cuidado!)"},
             {"transfer_temporary_directory", "Transfira arquivos para o diretório temporário quando a operação falhar devido a problemas de permissão"},
             {"show_filebrowser_first", "Mostrar a guia Navegador de arquivos primeiro"},
-            {"connection_timeout", "Tempo limite de conexão"}
+            {"connection_timeout", "Tempo limite de conexão"},
+            {"show", "Mostrar"},
+            {"keep_alive", "Mantenha a conexão viva"}
     };
 }
