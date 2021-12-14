@@ -1,8 +1,8 @@
 # Muon SSH Terminal/SFTP client ( Formerly Snowflake ) ![Java CI](https://github.com/subhra74/snowflake/workflows/Java%20CI/badge.svg?branch=master) [![Github All Releases](https://img.shields.io/github/downloads/subhra74/snowflake/total.svg)]()
 
-<a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">Español</a>
-<a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">English</a>
-<a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">Portuguese</a>
+<a href="https://github.com/devlinx9/muon-ssh/blob/master/README_es.md">Español</a>
+<a href="https://github.com/devlinx9/muon-ssh/blob/master/README.md">English</a>
+<a href="https://github.com/devlinx9/muon-ssh/blob/master/README_pt.md">Portuguese</a>
 
 Easy and fun way to work with remote servers over SSH.
 
