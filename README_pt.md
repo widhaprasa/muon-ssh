@@ -4,36 +4,34 @@
 <a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">English</a>
 <a href="https://github.com/devlinx9/muon-ssh/releases/download/v2.0.0/muonssh_2.0.0.deb">Portuguese</a>
 
-Easy and fun way to work with remote servers over SSH.
+Maneira fácil e divertida de trabalhar com servidores remotos via SSH. 
 
-This project is being renamed as previous name "Snowflake" is confusing since there is already a popular product with the same name.
+Este projeto está sendo renomeado como o nome anterior "Snowflake" é confuso, pois já existe um produto popular com o mesmo nome. Muon é um cliente SSH gráfico. 
 
+Possui um navegador de arquivos SFTP aprimorado, emulador de terminal SSH, gerenciador de processos de recursos remotos, analisador de espaço em disco do servidor, editor de texto remoto, grande visualizador de log remoto e muitas outras ferramentas úteis, o que torna mais fácil trabalhar com servidores remotos. 
 
-Muon is a graphical SSH client. It has a enhanced SFTP file browser, SSH terminal emulator, remote resource/process manager, server disk space analyzer, remote text editor, huge remote log viewer and lots of other helpful tools, which makes it easy to work with remote servers. Muon provides functionality similar to web based control panels but, it works over SSH from local computer, hence no installation required on server. It runs on Linux and Windows.
-Muon has been tested with serveral Linux and UNIX servers, like Ubuntu server, CentOS, RHEL, OpenSUSE, FreeBSD, OpenBSD, NetBSD and HP-UX.
-
-
+Muon fornece funcionalidade semelhante a painéis de controle baseados na web, mas funciona sobre SSH do computador local, portanto, nenhuma instalação necessária no servidor. Ele roda em Linux e Windows. Muon foi testado com servidores Linux e UNIX serveral, como servidor Ubuntu, CentOS, RHEL, OpenSUSE, FreeBSD, OpenBSD, NetBSD e HP-UX.
 
 [![IMAGE ALT TEXT](https://raw.githubusercontent.com/subhra74/snowflake-screenshots/master/Capture32.PNG)](https://youtu.be/G2qHZ2NodeM "View on YouTube")
 
-<h3>Intended audience</h3>
-<p>The application is targeted mainly towards web/backend developers who often deploy/debug their code on remote servers and not overly fond of complex terminal based commands. It could also be useful for sysadmins as well who manages lots of remote servers manually.
+<h3>Audiência pretendida</h3>
+<p>O aplicativo é voltado principalmente para desenvolvedores de webbackend que muitas vezes implantam o debug de seu código em servidores remotos e não gostam muito de comandos complexos baseados em terminal. Também pode ser útil para administradores de sistemas que gerenciam muitos servidores remotos manualmente.
 </p>
 
-<h3>How it works</h3>
+<h3>Como funciona</h3>
 <div>
   <img src="https://github.com/subhra74/snowflake-screenshots/raw/master/arch-overview2.png">
 </div>
 
-<h2>Download:</h2>
+<h2>Baixar:</h2>
 
 <table>
   <tr>
-    <th>Versions</th>
+    <th>Versões</th>
     <th>Windows</th>
     <th>Ubuntu/Mint/Debian</th>
     <th>MacOS</th>
-    <th>Other</th>
+    <th>Outros</th>
   </tr>
   <tr>
     <td>
@@ -78,35 +76,35 @@ Muon has been tested with serveral Linux and UNIX servers, like Ubuntu server, C
 </table>
 
 <p>
-<a href="https://github.com/devlinx9/muon-ssh/releases">Other Releases</a>
+<a href="https://github.com/devlinx9/muon-ssh/releases">Outros lançamentos</a>
 </p>
 
 
-<h2>Building from source:</h2>
-<pre> This is a standard maven project. If you have configured Java and Maven use: 
- <b>mvn clean install</b> to build the project.
- The jar will be created in target directory
+<h2>Construindo a partir da fonte:</h2>
+<pre> Este é um projeto padrão do maven. Se você configurou Java e Maven, use: 
+ <b>mvn clean install</b> para construir o projeto. 
+ O jar será criado no diretório de destino
  </pre>
 
-<h2>Features:</h2>
+<h2>Recursos:</h2>
 
 <ul>
-  <li>Simple graphical interface for common file operations</li>
-  <li>Built in text editor with syntax highlighting and support for sudo</li>
-  <li>Simply view and search huge log/text files in a jiffy</li>
-  <li>Fast powerful file and content search, powered by find command</li>
-  <li>Built in terminal and command snippet</li>
-  <li>Fully equiped task manager</li>
-  <li>Built in graphical disk space analyzer</li>
-  <li>Linux specific tools</li>
-  <li>Manage SSH keys easily</li>
-  <li>Network tools</li>
-  <li>MultiLanguage Support</li>
+  <li>Interface gráfica simples para operações de arquivo comuns</li>
+  <li>Construído em editor de texto com destaque de sintaxe e suporte para sudo</li>
+  <li>Basta visualizar e pesquisar enormes arquivos de texto de registro em um instante</li>
+  <li>Pesquisa rápida e poderosa de arquivos e conteúdo, com base no comando find</li>
+  <li>Terminal integrado e snippet de comando</li>
+  <li>Gerenciador de tarefas totalmente equipado</li>
+  <li>Analisador gráfico de espaço em disco integrado</li>
+  <li>Ferramentas específicas do Linux</li>
+  <li>Gerenciar chaves SSH facilmente</li>
+  <li>Ferramentas de rede</li>
+  <li>Suporte multilíngue</li>
 </ul>
 
 
 
-<h2>Documentation:</h2>
+<h2>Documentação:</h2>
 
 <p>
   <a href="https://github.com/devlinx9/muon-ssh/wiki">
