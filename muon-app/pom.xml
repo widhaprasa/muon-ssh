@@ -13,7 +13,7 @@
     <artifactId>muon-app</artifactId>
 
     <name>muon-app</name>
-    <url>http://maven.apache.org</url>
+    <url>https://maven.apache.org</url>
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
-            <version>2.13.0</version>
+            <version>2.15.0</version>
         </dependency>
 
 
@@ -327,27 +327,23 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>sh.tak.appbundler</groupId>
-                <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-archiver</artifactId>
-                        <version>RELEASE</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.velocity</groupId>
-                        <artifactId>velocity-tools</artifactId>
-                        <version>2.0</version>
-                    </dependency>
-                </dependencies>
+                <groupId>de.perdian.maven.plugins</groupId>
+                <artifactId>macosappbundler-maven-plugin</artifactId>
+                <version>1.15.0</version>
                 <configuration>
-                    <mainClass>muon.app.App</mainClass>
-                    <jrePath>/Library/Java/JavaVirtualMachines/jdk-11.0.12.jdk</jrePath>
-                    <iconFile>./src/dmg/muonssh-logo.icns</iconFile>
-                    <bundleName>Muon</bundleName>
-                    <generateDiskImageFile>true</generateDiskImageFile>
+                    <plist>
+                        <CFBundleIconFile>src/dmg/muonssh-logo.icns</CFBundleIconFile>
+                        <CFBundleDisplayName>Muon</CFBundleDisplayName>
+                        <CFBundleDevelopmentRegion>English</CFBundleDevelopmentRegion>
+                        <JVMMainClassName>muon.app.App</JVMMainClassName>
+                        <JVMVersion>11+</JVMVersion>
+                    </plist>
+                    <!--
+                    Uncomment it to build .dmg file
+                    <dmg>
+                        <generate>true</generate>
+                    </dmg>
+                    -->
                 </configuration>
                 <executions>
                     <execution>
@@ -358,7 +354,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
     <repositories>
