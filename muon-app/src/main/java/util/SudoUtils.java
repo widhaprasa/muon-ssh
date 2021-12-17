@@ -158,7 +158,6 @@ public class SudoUtils {
 
                     Reader r = new InputStreamReader(in,
                             StandardCharsets.UTF_8);
-                    int tries=0;
 
                     while (true) {
                         int ch = r.read();
@@ -177,10 +176,6 @@ public class SudoUtils {
                         }
 
                         // Thread.sleep(50);
-                        if (tries>1){
-                            return -2;
-                        }
-                        tries++;
                     }
                     cmd.join();
                     cmd.close();
