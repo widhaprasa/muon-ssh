@@ -107,7 +107,7 @@ public class SshFileOperations {
                     "Access denied, rename using sudo?", "Use sudo?",
                     JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                 if (!instance.isSessionClosed()) {
-                    JOptionPane.showMessageDialog(null, "Operation failed");
+                    JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                 }
                 return false;
             }
@@ -118,7 +118,7 @@ public class SshFileOperations {
             }
 
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
         } else {
             return true;
@@ -184,7 +184,7 @@ public class SshFileOperations {
                     "Access denied, copy using sudo?", "Use sudo?",
                     JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                 if (!instance.isSessionClosed()) {
-                    JOptionPane.showMessageDialog(null, "Operation failed");
+                    JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                 }
                 return false;
             }
@@ -195,7 +195,7 @@ public class SshFileOperations {
             }
 
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
         } else {
             return true;
@@ -240,13 +240,13 @@ public class SshFileOperations {
             }
 
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
             return false;
         } catch (Exception e) {
             e.printStackTrace();
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
             return false;
         }
@@ -260,7 +260,7 @@ public class SshFileOperations {
         int ret = SudoUtils.runSudo(command.toString(), instance, password);
         if (ret == -1) {
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
         }
         return ret == 0;
@@ -296,7 +296,7 @@ public class SshFileOperations {
                 return deletePrivilege(targetList, instance, password);
             }
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
             return false;
 
@@ -322,7 +322,7 @@ public class SshFileOperations {
         System.out.println("Invoke sudo: " + sb);
         int ret = SudoUtils.runSudo(sb.toString(), instance, password);
         if (ret == -1) {
-            JOptionPane.showMessageDialog(null, "Operation failed");
+            JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
         }
         return ret == 0;
     }
@@ -360,21 +360,21 @@ public class SshFileOperations {
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 if (!touchWithPrivilege(folder, text, instance, password)) {
                     if (!instance.isSessionClosed()) {
-                        JOptionPane.showMessageDialog(null, "Operation failed");
+                        JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                     }
                     return false;
                 }
                 return true;
             }
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
 
             return false;
         } catch (Exception e1) {
             e1.printStackTrace();
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
         }
         return false;
@@ -389,7 +389,7 @@ public class SshFileOperations {
         int ret = SudoUtils.runSudo(command.toString(), instance, password);
         if (ret == -1) {
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
         }
         return ret == 0;
@@ -428,21 +428,21 @@ public class SshFileOperations {
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 if (!mkdirWithPrivilege(folder, text, instance, password)) {
                     if (!instance.isSessionClosed()) {
-                        JOptionPane.showMessageDialog(null, "Operation failed");
+                        JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                     }
                     return false;
                 }
                 return true;
             }
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
             return false;
 
         } catch (Exception e1) {
             e1.printStackTrace();
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Operation failed");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
             }
         }
         return false;
@@ -456,7 +456,7 @@ public class SshFileOperations {
         System.out.println("Invoke sudo: " + command);
         int ret = SudoUtils.runSudo(command.toString(), instance, password);
         if (ret == -1 && !instance.isSessionClosed()) {
-            JOptionPane.showMessageDialog(null, "Operation failed");
+            JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
         }
         return ret == 0;
     }

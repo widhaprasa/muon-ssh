@@ -813,7 +813,7 @@ public class SshMenuHandler {
             try {
                 if (!archiveOperation.extractArchive(fileBrowserView.getSshClient(), archive, folder, stopFlag)) {
                     if (!fileBrowser.isSessionClosed()) {
-                        JOptionPane.showMessageDialog(null, "Operation failed");
+                        JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                     }
                 }
                 fileBrowserView.render(currentFolder);
@@ -830,7 +830,7 @@ public class SshMenuHandler {
             try {
                 if (!archiveOperation.createArchive(fileBrowserView.getSshClient(), files, folder, stopFlag)) {
                     if (!fileBrowser.isSessionClosed()) {
-                        JOptionPane.showMessageDialog(null, "Operation failed");
+                        JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                     }
                 }
                 fileBrowserView.render(currentFolder);
