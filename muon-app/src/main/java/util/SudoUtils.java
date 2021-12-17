@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-//import snowflake.common.ssh.SshClient;
 
 public class SudoUtils {
     private static final JPasswordField passwordField = new JPasswordField(30);
@@ -140,7 +139,7 @@ public class SudoUtils {
 
     public static int runSudoWithOutput(String command,
                                         RemoteSessionInstance instance, StringBuilder output,
-                                        StringBuilder error) {
+                                        StringBuilder error, String password) {
         String prompt = UUID.randomUUID().toString();
         try {
             String fullCommand = "sudo -S -p '" + prompt + "' " + command;
@@ -159,6 +158,7 @@ public class SudoUtils {
 
                     Reader r = new InputStreamReader(in,
                             StandardCharsets.UTF_8);
+                    int tries=0;
 
                     while (true) {
                         int ch = r.read();
@@ -169,25 +169,18 @@ public class SudoUtils {
 
                         System.out.println("buffer: " + sb);
                         if (sb.indexOf(prompt) != -1) {
-                            if (JOptionPane.showOptionDialog(null,
-                                    new Object[]{"Password for sudo",
-                                            passwordField},
-                                    "Authentication",
-                                    JOptionPane.OK_CANCEL_OPTION,
-                                    JOptionPane.PLAIN_MESSAGE, null, null,
-                                    null) == JOptionPane.OK_OPTION) {
-                                sb = new StringBuilder();
-                                out.write(
-                                        (new String(passwordField.getPassword())
-                                                + "\n").getBytes());
-                                out.flush();
-                            } else {
-                                cmd.close();
-                                return -2;
-                            }
+                            sb = new StringBuilder();
+                            out.write(
+                                    (password
+                                            + "\n").getBytes());
+                            out.flush();
                         }
 
                         // Thread.sleep(50);
+                        if (tries>1){
+                            return -2;
+                        }
+                        tries++;
                     }
                     cmd.join();
                     cmd.close();

@@ -160,7 +160,7 @@ public class PortViewer extends UtilPageItemView {
         });
 
         chkRunAsSuperUser = new JCheckBox(
-                "Perform actions as super user (sudo)");
+                bundle.getString("actions_sudo"));
         box.add(chkRunAsSuperUser);
 
         box.add(Box.createHorizontalGlue());
@@ -198,7 +198,7 @@ public class PortViewer extends UtilPageItemView {
                         try {
                             if (SudoUtils.runSudoWithOutput(cmd,
                                     holder.getRemoteSessionInstance(), output,
-                                    new StringBuilder()) == 0) {
+                                    new StringBuilder(),holder.getInfo().getPassword()) == 0) {
                                 java.util.List<SocketEntry> list = this
                                         .parseSocketList(output.toString());
                                 SwingUtilities.invokeAndWait(() -> {

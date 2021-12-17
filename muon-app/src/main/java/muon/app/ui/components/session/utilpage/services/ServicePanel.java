@@ -389,7 +389,7 @@ public class ServicePanel extends UtilPageItemView {
                         try {
                             if (this.runCommandWithSudo(
                                     holder.getRemoteSessionInstance(), stopFlag,
-                                    cmd)) {
+                                    cmd,holder.getInfo().getPassword())) {
                                 updateView(stopFlag);
                                 return;
                             }
@@ -429,9 +429,9 @@ public class ServicePanel extends UtilPageItemView {
     }
 
     public boolean runCommandWithSudo(RemoteSessionInstance client,
-                                      AtomicBoolean stopFlag, String command) throws Exception {
+                                      AtomicBoolean stopFlag, String command, String password) throws Exception {
         // StringBuilder output = new StringBuilder();
-        return SudoUtils.runSudo(command, client) == 0;
+        return SudoUtils.runSudo(command, client, password) == 0;
     }
 
     public boolean runCommand(RemoteSessionInstance client,
