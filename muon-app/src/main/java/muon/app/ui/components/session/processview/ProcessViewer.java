@@ -3,6 +3,7 @@
  */
 package muon.app.ui.components.session.processview;
 
+import muon.app.App;
 import muon.app.ssh.RemoteSessionInstance;
 import muon.app.ui.components.session.Page;
 import muon.app.ui.components.session.SessionContentPanel;
@@ -93,10 +94,8 @@ public class ProcessViewer extends Page {
                         if (holder.getRemoteSessionInstance().exec(cmd, stopFlag, new StringBuilder(),
                                 new StringBuilder()) != 0) {
                             if (!holder.isSessionClosed()) {
-                                JOptionPane.showMessageDialog(null, "Operation failed");
+                                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                             }
-                            // JOptionPane.showMessageDialog(this, "Operation
-                            // failed");
                         } else {
                             updateProcessList(stopFlag);
                         }
@@ -110,9 +109,9 @@ public class ProcessViewer extends Page {
                 break;
             case KILL_AS_ROOT:
                 holder.EXECUTOR.execute(() -> {
-                    if (SudoUtils.runSudo(cmd, holder.getRemoteSessionInstance()) != 0) {
+                    if (SudoUtils.runSudo(cmd, holder.getRemoteSessionInstance(),holder.getInfo().getPassword()) != 0) {
                         if (!holder.isSessionClosed()) {
-                            JOptionPane.showMessageDialog(null, "Operation failed");
+                            JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                         }
                     } else {
                         updateProcessList(stopFlag);

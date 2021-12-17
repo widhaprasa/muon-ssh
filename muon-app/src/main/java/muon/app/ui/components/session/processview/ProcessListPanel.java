@@ -26,7 +26,8 @@ public class ProcessListPanel extends JPanel {
     private final JPopupMenu prioPopup;
     private final BiConsumer<String, CommandMode> consumer;
     private final JLabel lblProcessCount;
-    private JButton btnKill, btnCopyArgs;// , btnStop;
+    private JButton btnKill;
+    private final JButton btnCopyArgs;// , btnStop;
     private String filterText = "";
 
     public ProcessListPanel(BiConsumer<String, CommandMode> consumer) {
@@ -38,9 +39,7 @@ public class ProcessListPanel extends JPanel {
         table = new JTable(model);
 
         table.getSelectionModel().addListSelectionListener(e -> {
-            btnKill.setEnabled(table.getSelectedRows().length > 0);
-//            btnChangePriority.setEnabled(table.getSelectedRows().length > 0 && !hasPendingOperation.get());
-            btnCopyArgs.setEnabled(table.getSelectedRows().length > 0);
+            enableProcessesButtons();
         });
 
         // table.setAutoCreateRowSorter(true);
@@ -129,6 +128,7 @@ public class ProcessListPanel extends JPanel {
                         .get(table.convertRowIndexToModel(c));
                 this.consumer.accept("kill -9 " + ent.getPid(),
                         CommandMode.KILL_AS_USER);
+                enableProcessesButtons();
             }
         });
 
@@ -141,6 +141,7 @@ public class ProcessListPanel extends JPanel {
                 btnKill.setEnabled(false);
                 this.consumer.accept("kill -9 " + ent.getPid(),
                         CommandMode.KILL_AS_ROOT);
+                enableProcessesButtons();
             }
         });
 
@@ -231,6 +232,11 @@ public class ProcessListPanel extends JPanel {
 
     public enum CommandMode {
         KILL_AS_ROOT, KILL_AS_USER, LIST_PROCESS
+    }
+
+    private void enableProcessesButtons(){
+        btnKill.setEnabled(table.getSelectedRows().length > 0);
+        btnCopyArgs.setEnabled(table.getSelectedRows().length > 0);
     }
 
 //    public void enableStop() {

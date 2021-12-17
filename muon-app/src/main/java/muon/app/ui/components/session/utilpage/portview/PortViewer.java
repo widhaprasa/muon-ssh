@@ -3,6 +3,7 @@
  */
 package muon.app.ui.components.session.utilpage.portview;
 
+import muon.app.App;
 import muon.app.ui.components.SkinnedScrollPane;
 import muon.app.ui.components.SkinnedTextField;
 import muon.app.ui.components.session.SessionContentPanel;
@@ -209,8 +210,7 @@ public class PortViewer extends UtilPageItemView {
                             ex.printStackTrace();
                         }
                         if (!holder.isSessionClosed()) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Operation failed");
+                            JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                         }
                     } else {
                         System.out.println("Command was: " + cmd);
@@ -231,8 +231,7 @@ public class PortViewer extends UtilPageItemView {
                             ex.printStackTrace();
                         }
                         if (!holder.isSessionClosed()) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Operation failed");
+                            JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                         }
                     }
                 } catch (Exception e) {

@@ -480,7 +480,7 @@ public class FileBrowser extends Page {
                         SwingUtilities.invokeLater(() -> {
                             holder.endFileTransfer();
                             if (!holder.isSessionClosed()) {
-                                JOptionPane.showMessageDialog(null, "Operation failed");
+                                JOptionPane.showMessageDialog(null, App.bundle.getString("operation_failed"));
                             }
                         });
                     }
