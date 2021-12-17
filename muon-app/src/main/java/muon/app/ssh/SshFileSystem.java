@@ -119,7 +119,6 @@ public class SshFileSystem implements FileSystem {
 			while (true) {
 				String str = sftp.readlink(pathToResolve);
 				System.out.println("Read symlink: " + pathToResolve + "=" + str);
-				pathToResolve = str.startsWith("/") ? str : PathUtils.combineUnix(pathToResolve, str);
 				System.out.println("Getting link attrs: " + pathToResolve);
 				attrs = sftp.stat(pathToResolve);
 
