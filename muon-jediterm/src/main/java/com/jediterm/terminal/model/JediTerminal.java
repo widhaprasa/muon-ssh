@@ -9,8 +9,6 @@ import com.jediterm.terminal.model.hyperlinks.LinkInfo;
 import com.jediterm.terminal.ui.TerminalCoordinates;
 import com.jediterm.terminal.util.CharUtils;
 import org.apache.log4j.Logger;
-//import org.jetbrains.annotations.NotNull;
-//import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -1183,7 +1181,7 @@ public class JediTerminal implements Terminal, TerminalMouseListener, TerminalCo
     private final SortedSet<Integer> myTabStops;
 
     private int myWidth;
-    private int myTabLength;
+    private final int myTabLength;
 
     public DefaultTabulator(int width) {
       this(width, TAB_LENGTH);

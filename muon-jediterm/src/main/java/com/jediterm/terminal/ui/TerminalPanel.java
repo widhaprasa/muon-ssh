@@ -1,7 +1,6 @@
 package com.jediterm.terminal.ui;
 
-//import com.google.common.base.Ascii;
-//import com.google.common.collect.Lists;
+
 import com.jediterm.terminal.*;
 import com.jediterm.terminal.SubstringFinder.FindResult.FindItem;
 import com.jediterm.terminal.TextStyle.Option;
@@ -18,8 +17,6 @@ import com.jediterm.terminal.util.Pair;
 import muon.terminal.Ascii;
 
 import org.apache.log4j.Logger;
-////import org.jetbrains.annotations.NotNull;
-////import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -68,7 +65,7 @@ public class TerminalPanel extends JComponent
 
 	private TerminalPanelListener myTerminalPanelListener;
 
-	private SettingsProvider mySettingsProvider;
+	private final SettingsProvider mySettingsProvider;
 	final private TerminalTextBuffer myTerminalTextBuffer;
 
 	final private StyleState myStyleState;
@@ -91,8 +88,8 @@ public class TerminalPanel extends JComponent
 	private String myInputMethodUncommittedChars;
 
 	private Timer myRepaintTimer;
-	private AtomicInteger scrollDy = new AtomicInteger(0);
-	private AtomicBoolean needRepaint = new AtomicBoolean(true);
+	private final AtomicInteger scrollDy = new AtomicInteger(0);
+	private final AtomicBoolean needRepaint = new AtomicBoolean(true);
 
 	private int myMaxFPS = 50;
 	private int myBlinkingPeriod = 500;
@@ -106,9 +103,6 @@ public class TerminalPanel extends JComponent
 	private int myCursorType = Cursor.DEFAULT_CURSOR;
 	private final TerminalKeyHandler myTerminalKeyHandler = new TerminalKeyHandler();
 
-//	public TerminalPanel( SettingsProvider settingsProvider,
-//			 TerminalTextBuffer terminalTextBuffer,
-//			 StyleState styleState) {
 	public TerminalPanel(SettingsProvider settingsProvider,
 			TerminalTextBuffer terminalTextBuffer, StyleState styleState) {
 		mySettingsProvider = settingsProvider;
@@ -472,7 +466,7 @@ public class TerminalPanel extends JComponent
 
 	static class WeakRedrawTimer implements ActionListener {
 
-		private WeakReference<TerminalPanel> ref;
+		private final WeakReference<TerminalPanel> ref;
 
 		public WeakRedrawTimer(TerminalPanel terminalPanel) {
 			this.ref = new WeakReference<TerminalPanel>(terminalPanel);
@@ -550,9 +544,6 @@ public class TerminalPanel extends JComponent
 				(p.y - myClientScrollOrigin) * myCharSize.height);
 	}
 
-//	private void copySelection( Point selectionStart,
-//			 Point selectionEnd,
-//			boolean useSystemSelectionClipboardIfAvailable) {
 	private void copySelection(Point selectionStart, Point selectionEnd,
 			boolean useSystemSelectionClipboardIfAvailable) {
 		if (selectionStart == null || selectionEnd == null) {
@@ -1058,7 +1049,7 @@ public class TerminalPanel extends JComponent
 	}
 
 	public enum TerminalCursorState {
-		SHOWING, HIDDEN, NO_FOCUS;
+		SHOWING, HIDDEN, NO_FOCUS
 	}
 
 	public class TerminalCursor {

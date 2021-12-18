@@ -56,7 +56,7 @@ public class App {
     public static final String APP_INSTANCE_ID = UUID.randomUUID().toString();
     public static GraphicalHostKeyVerifier HOST_KEY_VERIFIER;
     public static ResourceBundle bundle;
-    public static AppSkin SKIN;// = new AppSkinDark();
+    public static AppSkin SKIN;
     private static Settings settings;
     private static InputBlocker inputBlocker;
     private static ExternalEditorHandler externalEditorHandler;
@@ -207,7 +207,6 @@ public class App {
     public synchronized static Settings getGlobalSettings() {
         return settings;
     }
-    // public static final AppSkin SKIN = new AppSkinLight();
 
     /**
      * @return the inputBlocker
