@@ -623,12 +623,10 @@ public class TerminalPanel extends JComponent
 		sizeTerminalFromComponent();
 	}
 
-	// public void addCustomKeyListener( KeyListener keyListener) {
 	public void addCustomKeyListener(KeyListener keyListener) {
 		myCustomKeyListeners.add(keyListener);
 	}
 
-	// public void removeCustomKeyListener( KeyListener keyListener) {
 	public void removeCustomKeyListener(KeyListener keyListener) {
 		myCustomKeyListeners.remove(keyListener);
 	}
@@ -768,10 +766,6 @@ public class TerminalPanel extends JComponent
 					new StyledTextConsumer() {
 						final int columnCount = getColumnCount();
 
-//						@Override
-//						public void consume(int x, int y,
-//								 TextStyle style,
-//								 CharBuffer characters, int startRow) {
 						@Override
 						public void consume(int x, int y, TextStyle style,
 								CharBuffer characters, int startRow) {
@@ -876,8 +870,6 @@ public class TerminalPanel extends JComponent
 		drawMargins(gfx, getWidth(), getHeight());
 	}
 
-	//
-//	private TextStyle getSelectionStyle( TextStyle style) {
 	private TextStyle getSelectionStyle(TextStyle style) {
 		if (mySettingsProvider.useInverseSelectionColor()) {
 			return getInversedStyle(style);
@@ -1318,10 +1310,6 @@ public class TerminalPanel extends JComponent
 
 			Font font = getFontToDisplay(buf.charAt(offset + blockLen - 1),
 					style);
-//      while (myMonospaced && (offset + blockLen < buf.getLength()) && isWordCharacter(buf.charAt(offset + blockLen - 1))
-//              && (font == getFontToDisplay(buf.charAt(offset + blockLen - 1), style))) {
-//        blockLen++;
-//      }
 
 			if (offset + 2 <= buf.length() && Character.isSurrogatePair(
 					renderingBuffer.getBuf()[buf.getStart() + offset],
@@ -1509,54 +1497,6 @@ public class TerminalPanel extends JComponent
 
 	@Override
 	public List<TerminalAction> getActions() {
-//		return Lists.newArrayList(
-//				new TerminalAction("Open as URL", new KeyStroke[0],
-//						input -> openSelectionAsURL())
-//								.withEnabledSupplier(this::selectionTextIsUrl),
-//				new TerminalAction("Copy",
-//						mySettingsProvider.getCopyKeyStrokes(),
-//						input -> handleCopy()).withMnemonicKey(KeyEvent.VK_C)
-//								.withEnabledSupplier(() -> mySelection != null),
-//				new TerminalAction("Paste",
-//						mySettingsProvider.getPasteKeyStrokes(), input -> {
-//							handlePaste();
-//							return true;
-//						}).withMnemonicKey(KeyEvent.VK_P).withEnabledSupplier(
-//								() -> getClipboardString() != null),
-//				new TerminalAction("Clear Buffer",
-//						mySettingsProvider.getClearBufferKeyStrokes(),
-//						input -> {
-//							clearBuffer();
-//							return true;
-//						}).withMnemonicKey(KeyEvent.VK_K)
-//								.withEnabledSupplier(() -> !myTerminalTextBuffer
-//										.isUsingAlternateBuffer())
-//								.separatorBefore(true),
-//				new TerminalAction("Page Up",
-//						mySettingsProvider.getPageUpKeyStrokes(), input -> {
-//							pageUp();
-//							return true;
-//						}).withEnabledSupplier(() -> !myTerminalTextBuffer
-//								.isUsingAlternateBuffer())
-//								.separatorBefore(true),
-//				new TerminalAction("Page Down",
-//						mySettingsProvider.getPageDownKeyStrokes(), input -> {
-//							pageDown();
-//							return true;
-//						}).withEnabledSupplier(() -> !myTerminalTextBuffer
-//								.isUsingAlternateBuffer()),
-//				new TerminalAction("Line Up",
-//						mySettingsProvider.getLineUpKeyStrokes(), input -> {
-//							scrollUp();
-//							return true;
-//						}).withEnabledSupplier(() -> !myTerminalTextBuffer
-//								.isUsingAlternateBuffer())
-//								.separatorBefore(true),
-//				new TerminalAction("Line Down",
-//						mySettingsProvider.getLineDownKeyStrokes(), input -> {
-//							scrollDown();
-//							return true;
-//						}));
 		ArrayList<TerminalAction> list = new ArrayList<>();
 		list.addAll(Arrays.asList(
 				new TerminalAction("Open as URL", new KeyStroke[0],
@@ -1882,8 +1822,6 @@ public class TerminalPanel extends JComponent
 		}
 	}
 
-	// private static String uncommittedChars(
-	// AttributedCharacterIterator text) {
 	private static String uncommittedChars(AttributedCharacterIterator text) {
 		if (text == null) {
 			return null;

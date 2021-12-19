@@ -705,10 +705,6 @@ public class JediTerminal implements Terminal, TerminalMouseListener, TerminalCo
       myStyleState.reset(); //Turns all character attributes off (normal setting).
 
       myGraphicSetState.resetState();
-      //myGraphicSetState.designateGraphicSet(0, CharacterSet.ASCII);//Maps the ASCII character set into GL
-      //mapCharsetToGL(0);
-      //myGraphicSetState.designateGraphicSet(1, CharacterSet.DEC_SUPPLEMENTAL);
-      //mapCharsetToGR(1); //and the DEC Supplemental Graphic set into GR
     }
     myDisplay.setCursor(myCursorX, myCursorY);
   }
