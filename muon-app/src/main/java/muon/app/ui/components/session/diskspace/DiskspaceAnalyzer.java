@@ -265,7 +265,6 @@ public class DiskspaceAnalyzer extends Page {
     }
 
     private void createTree(DefaultMutableTreeNode treeNode, DiskUsageEntry entry) {
-//        DefaultMutableTreeNode node = new DefaultMutableTreeNode(entry);
         Collections.sort(entry.getChildren(), (a, b) -> {
             return a.getSize() < b.getSize() ? 1 : (a.getSize() > b.getSize() ? -1 : 0);
         });

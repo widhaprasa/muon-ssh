@@ -55,34 +55,14 @@ public class SshTtyConnector implements DisposableTtyConnector {
             this.channel = wr.openSession();
             this.channel.setAutoExpand(true);
 
-            //Map<PTYMode, Integer>ptyMode=new CollectionHelper.Dict<PTYMode, Integer>().putItem(PTYMode., v)
-
             this.channel.allocatePTY(App.getGlobalSettings().getTerminalType(), App.getGlobalSettings().getTermWidth(),
                     App.getGlobalSettings().getTermHeight(), 0, 0, Collections.emptyMap());
             this.channel.setEnvVar("LANG", "en_US.UTF-8");
             this.shell = (SessionChannel) this.channel.startShell();
 
-            // String lang = System.getenv().get("LANG");
-
-            // this.channel.setEnvVar("LANG", lang != null ? lang :
-            // "en_US.UTF-8");
-            // this.channel.
-            // channel.setEnv("LANG", lang != null ? lang : "en_US.UTF-8");
-            // channel.setPtyType(App.getGlobalSettings().getTerminalType());
-            // channel.setPtyType("xterm-256color");
-
-//			PipedOutputStream pout1 = new PipedOutputStream();
-//			PipedInputStream pin1 = new PipedInputStream();
-//			channel.setOutputStream(pout1);
-//
-//			PipedOutputStream pout2 = new PipedOutputStream();
-//			PipedInputStream pin2 = new PipedInputStream(pout2);
-//			channel.setInputStream(pin2);
-
-            myInputStream = shell.getInputStream();// channel.getInputStream();
-            myOutputStream = shell.getOutputStream();// channel.getOutputStream();
+            myInputStream = shell.getInputStream();
+            myOutputStream = shell.getOutputStream();
             myInputStreamReader = new InputStreamReader(myInputStream, StandardCharsets.UTF_8);
-            // channel.connect();
 
             resizeImmediately();
             System.out.println("Initiated");
@@ -92,7 +72,6 @@ public class SshTtyConnector implements DisposableTtyConnector {
                 myOutputStream.flush();
             }
 
-            // resize(termSize, pixelSize);
             isInitiated.set(true);
             return true;
         } catch (Exception e) {
@@ -121,11 +100,6 @@ public class SshTtyConnector implements DisposableTtyConnector {
             resizeImmediately();
         }
 
-//		if (channel == null) {
-//			return;
-//		}
-//		System.out.println("Terminal resized");
-//		channel.setPtySize(termSize.width, termSize.height, pixelSize.width, pixelSize.height);
     }
 
     @Override
@@ -215,7 +189,6 @@ public class SshTtyConnector implements DisposableTtyConnector {
                 e.printStackTrace();
             }
         }
-        // channel.setPtySize(col, row, wp, hp);
     }
 
     @Override

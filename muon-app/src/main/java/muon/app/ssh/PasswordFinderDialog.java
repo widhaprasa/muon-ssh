@@ -45,13 +45,6 @@ public class PasswordFinderDialog implements PasswordFinder {
         }
         retry = false;
         return null;
-//		if (password != null && firstAttempt.get()) {
-//			return password.toCharArray();
-//		}
-//		txtPass.setText("");
-//		
-//if(JOptionPane.showOptionDialog(null, , resource, JOptionPane., messageType, icon, options, initialValue))
-//		return null;
     }
 
     @Override

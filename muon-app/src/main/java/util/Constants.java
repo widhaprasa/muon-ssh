@@ -57,7 +57,7 @@ public class Constants {
 
     public enum TransferMode {
 
-        @JsonEnumDefaultValue NORMAL(0, bundle.getString("transfer_normally")), BACKGROUND(1, bundle.getString("transfer_background"));//, NORMAL ;
+        @JsonEnumDefaultValue NORMAL(0, bundle.getString("transfer_normally")), BACKGROUND(1, bundle.getString("transfer_background"));
 
         private int key;
         private String value;
