@@ -315,7 +315,7 @@ public class SshMenuHandler {
 
         mExtractTo = new JMenuItem(bundle.getString("extract_to"));
         mExtractTo.addActionListener(e -> {
-            String text = JOptionPane.showInputDialog(bundle.getString("selec_target"),
+            String text = JOptionPane.showInputDialog(bundle.getString("select_target"),
                     fileBrowserView.getCurrentDirectory());
             if (text == null || text.length() < 1) {
                 return;
