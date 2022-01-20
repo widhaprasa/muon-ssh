@@ -47,6 +47,7 @@ public class App {
     public static final String PINNED_LOGS = "pinned-logs.json";
     public static final String TRANSFER_HOSTS = "transfer-hosts.json";
     public static final String BOOKMARKS_FILE = "bookmarks.json";
+    private static final String PATH_MESSAGES_FILE= "i18n/messages";
     public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     public static final SnippetManager SNIPPET_MANAGER = new SnippetManager();
     public static final boolean IS_MAC = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH)
@@ -69,10 +70,7 @@ public class App {
 
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
 
-        Language language = Language.ENGLISH;
-        Locale locale = new Locale(language.getLangAbbr());
-
-        bundle = ResourceBundle.getBundle("muon.app.common.i18n.Messages", locale);
+        setBundleLanguage();
 
         Security.addProvider(new BouncyCastleProvider());
 
@@ -108,15 +106,10 @@ public class App {
             System.out.println("Searching for known editors...done");
         }
 
+        setBundleLanguage();
+        Constants.TransferMode.update();
+        Constants.ConflictAction.update();
 
-        if (settings.getLanguage() != null) {
-            language = settings.getLanguage();
-            locale = new Locale(language.getLangAbbr());
-            bundle = ResourceBundle.getBundle("muon.app.common.i18n.Messages", locale);
-            Constants.TransferMode.update();
-            Constants.ConflictAction.update();
-
-        }
 
 
         SKIN = settings.isUseGlobalDarkTheme() ? new AppSkinDark() : new AppSkinLight();
@@ -277,6 +270,18 @@ public class App {
 
     public static synchronized AppWindow getAppWindow() {
         return mw;
+    }
+
+    //Set the bundle language
+    private static void setBundleLanguage(){
+        Language language = Language.ENGLISH;
+        if (settings != null && settings.getLanguage() != null){
+            language = settings.getLanguage();
+        }
+
+        Locale locale =  new Locale.Builder().setLanguage(language.getLangAbbr()).build();
+        bundle = ResourceBundle.getBundle(PATH_MESSAGES_FILE, locale);
+
     }
 
 }

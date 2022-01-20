@@ -75,8 +75,8 @@ public class DiskspaceAnalyzer extends Page {
     }
 
     private Component createFirstPanel() {
-        JRadioButton radFolder = new JRadioButton(bundle.getString("analize_folder"));
-        JRadioButton radVolume = new JRadioButton(bundle.getString("analize_volume"));
+        JRadioButton radFolder = new JRadioButton(bundle.getString("analyze_folder"));
+        JRadioButton radVolume = new JRadioButton(bundle.getString("analyze_volume"));
         radFolder.setFont(App.SKIN.getDefaultFont().deriveFont(14.0f));
         radVolume.setFont(App.SKIN.getDefaultFont().deriveFont(14.0f));
         radFolder.setHorizontalAlignment(JRadioButton.LEFT);
