@@ -279,37 +279,4 @@ public class App {
         return mw;
     }
 
-//	private static final SecretKey generateKeys() {
-//		/*
-//		 * 
-//		 * SecretKeyFactory factory =
-//		 * SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256"); KeySpec spec = new
-//		 * PBEKeySpec(password, salt, 65536, 256); SecretKey tmp =
-//		 * factory.generateSecret(spec); SecretKey secret = new
-//		 * SecretKeySpec(tmp.getEncoded(), "AES");
-//		 * 
-//		 */
-//
-//		KeyGenerator kgen;
-//		try {
-//			kgen = KeyGenerator.getInstance("AES");
-//			SecretKey skey = kgen.generateKey();
-//			try (OutputStream out = new FileOutputStream(new File(App.CONFIG_DIR, "key.dat"))) {
-//				byte[] keyb = skey.getEncoded();
-//				out.write(keyb);
-//				return skey;
-//			} catch (FileNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		} catch (NoSuchAlgorithmException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
 }
