@@ -34,7 +34,8 @@ public class PasswordFinderDialog implements PasswordFinder {
         JPasswordField txtPass = new JPasswordField();
         JCheckBox chkUseCache = new JCheckBox("Remember for this session");
 
-        int ret = JOptionPane.showOptionDialog(null, new Object[]{resource.toString(), txtPass, chkUseCache},
+        int ret = JOptionPane.showOptionDialog(null,
+                new Object[]{resource!=null?resource.toString(): "Private key passphrase:", txtPass, chkUseCache},
                 "Passphrase", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
         if (ret == JOptionPane.OK_OPTION) {
             char[] passPhrase = txtPass.getPassword();
