@@ -40,7 +40,7 @@ public class App {
     public static final VersionEntry VERSION = new VersionEntry("v" + APPLICATION_VERSION);
     public static final String UPDATE_URL2 = UPDATE_URL + "/check-update.html?v="
             + VERSION.getNumericValue();
-    public static final String CONFIG_DIR = System.getProperty("user.home") + File.separatorChar + "muon-ssh";
+    public static String CONFIG_DIR = System.getProperty("user.home") + File.separatorChar + "muon-ssh";
     public static final String SESSION_DB_FILE = "session-store.json";
     public static final String CONFIG_DB_FILE = "settings.json";
     public static final String SNIPPETS_FILE = "snippets.json";
@@ -82,9 +82,22 @@ public class App {
 
         boolean firstRun = false;
 
+        //Checks if the parameter muonPath is set in the startup
+        String muonPath= System.getProperty("muonPath");
+        boolean isMuonPath=false;
+        if (muonPath != null && !muonPath.isEmpty()){
+            System.out.println("Muon path: "+muonPath);
+            CONFIG_DIR = muonPath;
+            isMuonPath = true;
+        }
+
         File appDir = new File(CONFIG_DIR);
         if (!appDir.exists()) {
-            appDir.mkdirs();
+            //Validate if the config directory can be created
+            if(!appDir.mkdirs()){
+                System.err.println("The config directory for moun cannot be created: "+ CONFIG_DIR);
+                System.exit(1);
+            }
             firstRun = true;
         }
 
@@ -95,7 +108,7 @@ public class App {
             System.setProperty("sun.java2d.uiScale", String.format("%.2f", settings.getUiScaling()));
         }
 
-        if (firstRun) {
+        if (firstRun && !isMuonPath) {
             SessionExportImport.importOnFirstRun();
         }
 
@@ -283,5 +296,4 @@ public class App {
         bundle = ResourceBundle.getBundle(PATH_MESSAGES_FILE, locale);
 
     }
-
 }
