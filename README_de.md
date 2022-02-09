@@ -7,35 +7,34 @@
 - <a href="https://github.com/devlinx9/muon-ssh/blob/master/README_fr.md">Français</a>
 - <a href="https://github.com/devlinx9/muon-ssh/blob/master/README_de.md">Deutsch</a>
 
-Простой и увлекательный способ работы с удаленными серверами через SSH. Этот проект был переименован в Muon, потому что его предыдущее название «Снежинка» сбивает с толку, и есть популярный продукт с таким же названием. 
+Eine unterhaltsame und einfache Möglichkeit, über SSH mit Remote-Servern zu arbeiten. 
+Dieses Projekt wurde in Muon umbenannt, da der frühere Name "Snowflake" verwirrend war, da es ein beliebtes Produkt mit demselben Namen gibt. 
 
-Muon - это графический SSH-клиент. Он имеет улучшенный браузер файлов SFTP, эмулятор терминала SSH, диспетчер процессов удаленных ресурсов, анализатор дискового пространства сервера, удаленный текстовый редактор, огромный удаленный просмотрщик журналов и многие другие полезные инструменты, которые упрощают работу с ним. удаленные серверы. 
+Muon ist ein grafischer SSH-Client. Es verfügt über einen verbesserten SFTP-Dateibrowser, einen SSH-Terminalemulator, einen Remote-Ressourcen-Prozessmanager, einen Server-Speicherplatzanalysator, einen Remote-Texteditor, einen riesigen Remote-Log-Viewer und viele andere nützliche Tools, die die Arbeit mit Remote-Servern erleichtern . 
 
-Muon предоставляет аналогичные функциональные возможности веб-панелям управления, но работает через SSH с локального компьютера, поэтому установка сервера не требуется. Работает в Linux и Windows. 
-
-Muon был протестирован с различными серверами Linux и UNIX, такими как сервер Ubuntu, CentOS, RHEL, OpenSUSE, FreeBSD, OpenBSD, NetBSD и HP-UX.
+Muon bietet ähnliche Funktionen wie webbasierte Control Panels, funktioniert jedoch über SSH vom lokalen Computer aus, sodass keine Serverinstallation erforderlich ist. Es funktioniert unter Linux und Windows. Muon wurde mit verschiedenen Linux- und UNIX-Servern wie Ubuntu Server, CentOS, RHEL, OpenSUSE, FreeBSD, OpenBSD, NetBSD und HP-UX getestet.
 
 [![IMAGE ALT TEXT](https://raw.githubusercontent.com/subhra74/snowflake-screenshots/master/Capture32.PNG)](https://youtu.be/G2qHZ2NodeM "View on YouTube")
 
-<h3>Целевые аудитории</h3>
-<p>Приложение в первую очередь нацелено на веб-разработчиков, которые часто развертывают отладку своего кода на удаленных серверах и не слишком любят сложные терминальные команды. Это также может быть полезно для системных администраторов, которые вручную управляют множеством удаленных серверов.
+<h3>Zielpublikum</h3>
+<p>Die App richtet sich in erster Linie an Webbackend-Entwickler, die ihren Code häufig auf Remote-Servern bereitstellen und debuggen und komplexe Terminal-basierte Befehle nicht besonders mögen. Es könnte auch für Systemadministratoren nützlich sein, die viele entfernte Server manuell verwalten.
 </p>
 
-<h3>Как это работает</h3>
+<h3>Wie funktioniert es</h3>
 <div>
   <img src="https://github.com/subhra74/snowflake-screenshots/raw/master/arch-overview2.png">
 </div>
 
-<h2>Скачать*:</h2>
+<h2>Abladen*:</h2>
 
 <table>
   <tr>
-    <th>Версии</th>
+    <th>Wendung</th>
     <th>Windows</th>
     <th>Ubuntu/Mint/Debian</th>
     <th>MacOS</th>
-    <th>Другие OSes</th>
-    <th>Портативный</th>
+    <th>Andere OSes</th>
+    <th>Portabel</th>
   </tr>
 <tr>
     <td>
@@ -121,40 +120,39 @@ Muon был протестирован с различными серверам�
 
 
 <p>
-<a href="https://github.com/devlinx9/muon-ssh/releases">Другие версии</a>
+<a href="https://github.com/devlinx9/muon-ssh/releases">Andere Versionen</a>
 </p>
 
 <p>
-<b>* У вас должна быть установлена ​​как минимум Java 11.</b>
+<b>* Sie müssen mindestens Java 11 installiert haben</b>
 </p>
 
 
-
-<h2>Строительство из первоисточника:</h2>
-<pre> Это стандартный проект maven. Если вы настроили Java и Maven, используйте: 
- <b>mvn clean install</b> скомпилировать проект.
- Баночка будет создана в целевом каталоге..
+<h2>Bauen von der Quelle:</h2>
+<pre> Dies ist ein Standard-Maven-Projekt. Wenn Sie Java und Maven konfiguriert haben, verwenden Sie: 
+ <b>mvn clean install</b> um das Projekt zu kompilieren.
+ Das JAR wird im Zielverzeichnis erstellt.
  </pre>
 
-<h2>Характеристики:</h2>
+<h2>Eigenschaften:</h2>
 
 <ul>
-  <li>Простой графический интерфейс для стандартных файловых операций</li>
-  <li>Встроенный текстовый редактор с подсветкой синтаксиса и поддержкой sudo</li>
-  <li>Просто просматривайте и ищите огромные текстовые файлы журналов в мгновение ока</li>
-  <li>Быстрый и эффективный поиск файлов и содержимого с помощью команды поиска</li>
-  <li>Интегрированный терминал и фрагмент команды</li>
-  <li>Полностью оборудованный диспетчер задач</li>
-  <li>Встроенный графический анализатор дискового пространства</li>
-  <li>Специальные инструменты для Linux</li>
-  <li>Легко управлять ключами SSH</li>
-  <li>Сетевые инструменты</li>
-  <li>Многоязычная поддержка</li>
+  <li>Einfache grafische Oberfläche für allgemeine Dateioperationen</li>
+  <li>Integrierter Texteditor mit Syntaxhervorhebung und Sudo-Unterstützung</li>
+  <li>Sehen und durchsuchen Sie einfach riesige Protokolltextdateien im Handumdrehen</li>
+  <li>Schnelle und leistungsstarke Suche nach Dateien und Inhalten, unterstützt durch den Suchbefehl</li>
+  <li>Integriertes Terminal- und Befehls-Snippet</li>
+  <li>Voll ausgestatteter Task-Manager</li>
+  <li>Integrierter grafischer Speicherplatzanalysator</li>
+  <li>Linux-spezifische Tools</li>
+  <li>Verwalten Sie SSH-Schlüssel einfach</li>
+  <li>Netzwerk-Tools</li>
+  <li>Mehrsprachige Unterstützung</li>
 </ul>
 
 
 
-<h2>Документация:</h2>
+<h2>Beurkundung:</h2>
 
 <p>
   <a href="https://github.com/devlinx9/muon-ssh/wiki">

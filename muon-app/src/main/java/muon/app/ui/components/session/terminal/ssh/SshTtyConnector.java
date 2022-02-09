@@ -57,7 +57,15 @@ public class SshTtyConnector implements DisposableTtyConnector {
 
             this.channel.allocatePTY(App.getGlobalSettings().getTerminalType(), App.getGlobalSettings().getTermWidth(),
                     App.getGlobalSettings().getTermHeight(), 0, 0, Collections.emptyMap());
-            this.channel.setEnvVar("LANG", "en_US.UTF-8");
+
+            try{
+                this.channel.setEnvVar("LANG", "en_US.UTF-8");
+            }catch (Exception e){
+                e.printStackTrace();
+                System.err.println("Cannot set environment variable Lang: " + e.getMessage());
+            }
+
+
             this.shell = (SessionChannel) this.channel.startShell();
 
             myInputStream = shell.getInputStream();
