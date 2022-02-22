@@ -98,7 +98,7 @@ public class SshFileOperations {
         System.out.println("Move: " + command);
         if (instance.exec(command.toString(), new AtomicBoolean(false)) != 0) {
             if (!App.getGlobalSettings().isUseSudo()) {
-                JOptionPane.showMessageDialog(null, "Access denied");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("access_denied"));
                 return false;
             }
 
@@ -286,7 +286,7 @@ public class SshFileOperations {
         } catch (FileNotFoundException | AccessDeniedException e) {
             e.printStackTrace();
             if (!App.getGlobalSettings().isUseSudo()) {
-                JOptionPane.showMessageDialog(null, "Access denied");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("access_denied"));
                 return false;
             }
             if (!App.getGlobalSettings().isPromptForSudo()
@@ -303,7 +303,7 @@ public class SshFileOperations {
         } catch (Exception e) {
             e.printStackTrace();
             if (!instance.isSessionClosed()) {
-                JOptionPane.showMessageDialog(null, "Error deleting file");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("error_delete_file"));
             }
 
             return false;
@@ -349,7 +349,7 @@ public class SshFileOperations {
         } catch (AccessDeniedException e1) {
             e1.printStackTrace();
             if (!App.getGlobalSettings().isUseSudo()) {
-                JOptionPane.showMessageDialog(null, "Access denied");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("access_denied"));
                 return false;
             }
             if (!App.getGlobalSettings().isPromptForSudo()
