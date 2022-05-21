@@ -129,7 +129,7 @@ public class SshClient2 implements Closeable {
             if (password == null || password.length < 1) {
                 JTextField txtUser = new SkinnedTextField(30);
                 JPasswordField txtPassword = new JPasswordField(30);
-                JCheckBox chkUseCache = new JCheckBox("Remember credential for this session");
+                JCheckBox chkUseCache = new JCheckBox(App.bundle.getString("remember_session"));
                 txtUser.setText(user);
                 int ret = JOptionPane.showOptionDialog(null,
                         new Object[]{"User", txtUser, "Password", txtPassword, chkUseCache}, "Authentication",
@@ -312,8 +312,8 @@ public class SshClient2 implements Closeable {
         String user = getUser();
         if (user == null || user.length() < 1) {
             JTextField txtUser = new SkinnedTextField(30);
-            JCheckBox chkCacheUser = new JCheckBox("Remember user name for this session");
-            int ret = JOptionPane.showOptionDialog(null, new Object[]{"User name", txtUser, chkCacheUser}, "User",
+            JCheckBox chkCacheUser = new JCheckBox(App.bundle.getString("remember_username"));
+            int ret = JOptionPane.showOptionDialog(null, new Object[]{"User name", txtUser, chkCacheUser}, App.bundle.getString("user"),
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
             if (ret == JOptionPane.OK_OPTION) {
                 user = txtUser.getText();

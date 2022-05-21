@@ -175,7 +175,7 @@ public class JumpHostPanel extends JPanel {
             String path = txtKeyFile.getText();
             int port = (Integer) spPort.getValue();
             if (host.length() < 1 || user.length() < 1 || port <= 0) {
-                JOptionPane.showMessageDialog(this, "Invalid input: all fields mandatory");
+                JOptionPane.showMessageDialog(this, App.bundle.getString("invalid_input"));
                 continue;
             }
 

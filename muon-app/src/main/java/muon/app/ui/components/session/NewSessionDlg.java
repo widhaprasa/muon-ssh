@@ -423,7 +423,7 @@ public class NewSessionDlg extends JDialog implements ActionListener, TreeSelect
         save();
         this.info = (SessionInfo) selectedInfo;
         if (this.info.getHost() == null || this.info.getHost().length() < 1) {
-            JOptionPane.showMessageDialog(this, "No hostname provided");
+            JOptionPane.showMessageDialog(this, App.bundle.getString("no_hostname"));
             this.info = null;
             System.out.println("Returned");
             return;
