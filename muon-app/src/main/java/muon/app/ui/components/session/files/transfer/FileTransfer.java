@@ -126,7 +126,7 @@ public class FileTransfer implements Runnable, AutoCloseable {
                         if (!App.getGlobalSettings().isPromptForSudo() ||
                                 JOptionPane.showConfirmDialog(null,
                                         "Permission denied, do you want to copy files from the temporary folder to destination with sudo?",
-                                        "Insufficient permission", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                        App.bundle.getString("insufficient_permisions"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             String command = "sh -c  \"cd '" + tmpDir + "'; cp -r * '" + this.targetFolder + "'\"";
 
                             System.out.println("Invoke sudo: " + command);
@@ -256,7 +256,7 @@ public class FileTransfer implements Runnable, AutoCloseable {
 
             if (JOptionPane.showOptionDialog(null,
                     new Object[]{"Some file with the same name already exists. Please choose an action", cmbs},
-                    "Action required", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
+                    App.bundle.getString("action_required"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
                     null) == JOptionPane.YES_OPTION) {
                 action = (ConflictAction) cmbs.getSelectedItem();
             }

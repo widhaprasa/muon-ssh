@@ -133,7 +133,7 @@ public class App {
             int maxKeySize = javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
             System.out.println("maxKeySize: " + maxKeySize);
             if (maxKeySize < Integer.MAX_VALUE) {
-                JOptionPane.showMessageDialog(null, "Unlimited cryptography is not enabled in JVM");
+                JOptionPane.showMessageDialog(null, App.bundle.getString("unlimited cryptography"));
             }
         } catch (NoSuchAlgorithmException e1) {
             e1.printStackTrace();

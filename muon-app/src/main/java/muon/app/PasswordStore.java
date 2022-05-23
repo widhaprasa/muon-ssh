@@ -195,7 +195,7 @@ public final class PasswordStore {
             try {
                 JPasswordField txtPass = new JPasswordField(30);
                 if (JOptionPane.showOptionDialog(App.getAppWindow(), new Object[]{"Master password", txtPass},
-                        "Master password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
+                        App.bundle.getString("master_password"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
                         null) == JOptionPane.OK_OPTION) {
                     this.unlockStore(txtPass.getPassword());
                     return true;
@@ -203,7 +203,7 @@ public final class PasswordStore {
             } catch (IOException e) {
                 if (e.getCause() instanceof UnrecoverableKeyException) {
                     if (JOptionPane.showConfirmDialog(App.getAppWindow(),
-                            "Incorrect password.\nTry again?") != JOptionPane.YES_OPTION) {
+                            App.bundle.getString("incorrect_password")) != JOptionPane.YES_OPTION) {
                         break;
                     }
                 }
@@ -212,7 +212,7 @@ public final class PasswordStore {
             }
 
             if (JOptionPane.showConfirmDialog(App.getAppWindow(),
-                    "Error loading saved passwords\nTry again?") != JOptionPane.YES_OPTION) {
+                    App.bundle.getString("error_loading_password")) != JOptionPane.YES_OPTION) {
                 break;
             }
         }
