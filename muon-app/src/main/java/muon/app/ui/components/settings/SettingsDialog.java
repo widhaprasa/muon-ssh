@@ -48,7 +48,7 @@ public class SettingsDialog extends JDialog {
             defaultFoundBg;
     private JCheckBox chkConfirmBeforeDelete, chkConfirmBeforeMoveOrCopy, chkShowHiddenFilesByDefault, chkFirstFileBrowserView,
             chkUseSudo, chkPromptForSudo, chkTransferTemporaryDirectory,
-            chkDirectoryCache, chkShowPathBar, chkConfirmBeforeTerminalClosing, chkShowMessagePrompt,
+            chkDirectoryCache, chkShowPathBar, chkConfirmBeforeTerminalClosing, chkShowMessagePrompt, chkStartMaximized,
             chkUseGlobalDarkTheme, spConnectionKeepAlive;
     private KeyShortcutComponent[] kcc;
     private JCheckBox chkLogWrap;
@@ -396,6 +396,8 @@ public class SettingsDialog extends JDialog {
         chkShowPathBar = new JCheckBox(App.bundle.getString("current_folder"));
         chkShowMessagePrompt = new JCheckBox(App.bundle.getString("show_banner"));
 
+        chkStartMaximized = new JCheckBox(App.bundle.getString("start_maximized"));
+
         chkLogWrap = new JCheckBox(App.bundle.getString("word_wrap"));
         spLogLinesPerPage = new JSpinner(new SpinnerNumberModel(50, 10, 500, 1));
         spConnectionTimeout = new JSpinner(new SpinnerNumberModel(60, 30, 300, 5));
@@ -437,6 +439,8 @@ public class SettingsDialog extends JDialog {
         chkShowPathBar.setAlignmentX(Box.LEFT_ALIGNMENT);
         chkShowMessagePrompt.setAlignmentX(Box.LEFT_ALIGNMENT);
 
+        chkStartMaximized.setAlignmentX(Box.LEFT_ALIGNMENT);
+
         chkLogWrap.setAlignmentX(Box.LEFT_ALIGNMENT);
         spLogLinesPerPage.setAlignmentX(Box.LEFT_ALIGNMENT);
         spConnectionTimeout.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -463,6 +467,8 @@ public class SettingsDialog extends JDialog {
         vbox.add(chkShowPathBar);
         vbox.add(Box.createRigidArea(new Dimension(10, 10)));
         vbox.add(chkShowMessagePrompt);
+        vbox.add(Box.createRigidArea(new Dimension(10, 20)));
+        vbox.add(chkStartMaximized);
         vbox.add(Box.createRigidArea(new Dimension(10, 20)));
 
         JLabel lbl0 = new JLabel(App.bundle.getString("log_viewer_lines")), lbl1 = new JLabel(App.bundle.getString("connection_timeout")), lbl2 = new JLabel(App.bundle.getString("log_viewer_font_size")),
@@ -553,6 +559,8 @@ public class SettingsDialog extends JDialog {
         settings.setShowPathBar(chkShowPathBar.isSelected());
         settings.setShowMessagePrompt(chkShowMessagePrompt.isSelected());
         settings.setUseGlobalDarkTheme(chkUseGlobalDarkTheme.isSelected());
+
+        settings.setStartMaximized(chkStartMaximized.isSelected());
 
         settings.setConnectionTimeout((Integer) spConnectionTimeout.getValue());
         settings.setConnectionKeepAlive(spConnectionKeepAlive.isSelected());
@@ -646,6 +654,8 @@ public class SettingsDialog extends JDialog {
         chkShowPathBar.setSelected(settings.isShowPathBar());
         chkShowMessagePrompt.setSelected(settings.isShowMessagePrompt());
         chkUseGlobalDarkTheme.setSelected(settings.isUseGlobalDarkTheme());
+
+        chkStartMaximized.setSelected(settings.isStartMaximized());
 
         spConnectionTimeout.setValue(settings.getConnectionTimeout());
         spConnectionKeepAlive.setSelected(settings.isConnectionKeepAlive());

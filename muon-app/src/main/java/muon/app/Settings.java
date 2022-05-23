@@ -19,6 +19,7 @@ public class Settings {
     private Constants.TransferMode fileTransferMode = Constants.TransferMode.NORMAL;
     private Constants.ConflictAction conflictAction = Constants.ConflictAction.AUTORENAME;
     private boolean confirmBeforeDelete = true;
+    private boolean startMaximized = true;
     private boolean confirmBeforeMoveOrCopy = false;
     private boolean showHiddenFilesByDefault = false;
     private boolean firstFileBrowserView = false;
@@ -104,6 +105,14 @@ public class Settings {
 
     public void setShowHiddenFilesByDefault(boolean showHiddenFilesByDefault) {
         this.showHiddenFilesByDefault = showHiddenFilesByDefault;
+    }
+
+    public boolean isStartMaximized() {
+        return startMaximized;
+    }
+
+    public void setStartMaximized(boolean startMaximized) {
+        this.startMaximized = startMaximized;
     }
 
     public boolean isUseSudo() {

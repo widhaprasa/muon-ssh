@@ -67,7 +67,7 @@ public class AppWindow extends JFrame {
         int screenWidth = screenD.width - inset.left - inset.right;
         int screenHeight = screenD.height - inset.top - inset.bottom;
 
-        if (screenWidth < 1024 || screenHeight < 650) {
+        if (screenWidth < 1024 || screenHeight < 650 || App.getGlobalSettings().isStartMaximized()) {
             setSize(screenWidth, screenHeight);
         } else {
             int width = (screenWidth * 80) / 100;
@@ -83,6 +83,8 @@ public class AppWindow extends JFrame {
 
         this.add(createSessionPanel(), BorderLayout.WEST);
         this.add(this.cardPanel);
+
+
         this.bottomPanel = createBottomPanel();
         this.add(this.bottomPanel, BorderLayout.SOUTH);
 
