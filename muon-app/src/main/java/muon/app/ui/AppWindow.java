@@ -12,7 +12,7 @@ import muon.app.ui.components.session.files.transfer.BackgroundFileTransfer;
 import muon.app.ui.components.session.files.transfer.BackgroundTransferPanel;
 import muon.app.ui.components.settings.SettingsDialog;
 import muon.app.ui.components.settings.SettingsPageName;
-import muon.app.updater.UpdateChecker;
+//import muon.app.updater.UpdateChecker;
 import util.FontAwesomeContants;
 
 import javax.imageio.ImageIO;
@@ -45,7 +45,7 @@ public class AppWindow extends JFrame {
     private SessionListPanel sessionListPanel;
     private JLabel lblUploadCount, lblDownloadCount;
     private JPopupMenu popup;
-    private JLabel lblUpdate, lblUpdateText;
+    // private JLabel lblUpdate, lblUpdateText;
 
     /**
      *
@@ -100,12 +100,14 @@ public class AppWindow extends JFrame {
             });
         });
 
+        /*
         new Thread(() -> {
             if (UpdateChecker.isNewUpdateAvailable()) {
                 lblUpdate.setText(FontAwesomeContants.FA_DOWNLOAD);
                 lblUpdateText.setText("Update available");
             }
         }).start();
+        */
     }
 
     public void createFirstSessionPanel() {
@@ -296,6 +298,7 @@ public class AppWindow extends JFrame {
         b1.add(lblHelp);
         b1.add(Box.createRigidArea(new Dimension(10, 10)));
 
+        /*
         lblUpdate = new JLabel();
         lblUpdate.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lblUpdate.addMouseListener(new MouseAdapter() {
@@ -321,6 +324,7 @@ public class AppWindow extends JFrame {
         });
 
         b1.add(lblUpdateText);
+        */
 
         b1.add(Box.createRigidArea(new Dimension(10, 10)));
 

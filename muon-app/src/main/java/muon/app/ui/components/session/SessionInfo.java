@@ -192,6 +192,7 @@ public class SessionInfo extends NamedItem implements Serializable {
 
         if ("m2mrem".equals(uri.getScheme())) {
             SessionInfo info = new SessionInfo();
+            info.setId(UUID.randomUUID().toString());
 
             // Parse host and port
             String host = uri.getHost();
