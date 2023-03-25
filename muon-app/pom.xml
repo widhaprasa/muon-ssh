@@ -18,7 +18,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <simp.project.version>2.3.0</simp.project.version>
+        <compact.project.version>2.3.0</compact.project.version>
     </properties>
 
     <dependencies>
@@ -174,7 +174,7 @@
     </dependencies>
 
     <build>
-        <finalName>muonssh_${project.version}</finalName>
+        <finalName>muonssh_${compact.project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -211,7 +211,7 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <finalName>muonssh_${project.version}</finalName>
+                    <finalName>muonssh_${compact.project.version}</finalName>
                     <archiverConfig>
                         <compress>false</compress>
                     </archiverConfig>
@@ -243,7 +243,7 @@
                         </goals>
                         <configuration>
                             <controlDir>${basedir}/src/deb/control</controlDir>
-                            <deb>${project.build.directory}/muonssh_${project.version}.deb</deb>
+                            <deb>${project.build.directory}/muonssh_${compact.project.version}.deb</deb>
                             <dataSet>
                                 <data>
                                     <src>${basedir}/src/deb/opt/muonssh/muonssh-logo.png</src>
@@ -309,8 +309,8 @@
                         <configuration>
                             <icon>src/exe/muonssh.ico</icon>
                             <headerType>console</headerType>
-                            <outfile>target/muonssh_${project.version}.exe</outfile>
-                            <jar>target/muonssh_${project.version}.jar</jar>
+                            <outfile>target/muonssh_${compact.project.version}.exe</outfile>
+                            <jar>target/muonssh_${compact.project.version}.jar</jar>
                             <errTitle>Failed to load muonssh</errTitle>
                             <downloadUrl>https://www.oracle.com/java/technologies/downloads/#java11-windows</downloadUrl>
                             <classPath>
@@ -326,8 +326,8 @@
                                 <txtFileVersion>1.0.0.0</txtFileVersion>
                                 <fileDescription>Executes muon ssh client</fileDescription>
                                 <copyright>GPLv3.0</copyright>
-                                <productVersion>${simp.project.version}.0</productVersion>
-                                <txtProductVersion>${simp.project.version}.0</txtProductVersion>
+                                <productVersion>${compact.project.version}.0</productVersion>
+                                <txtProductVersion>${compact.project.version}.0</txtProductVersion>
                                 <productName>MuonSSH</productName>
                                 <internalName>muonssh</internalName>
                                 <originalFilename>muonssh.exe</originalFilename>

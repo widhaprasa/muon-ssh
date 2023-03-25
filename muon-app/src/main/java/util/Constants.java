@@ -11,7 +11,7 @@ public class Constants {
     public static final String API_UPDATE_URL = "https://api.github.com/repos/devlinx9/muon-ssh/releases/latest";
     public static final String REPOSITORY_URL = BASE_URL + "/muon-ssh";
     public static final String APPLICATION_VERSION = "2.3.0-M2MREM";
-    public static final String SIMP_APPLICATION_VERSION = "2.3.0";
+    public static final String COMPACT_APPLICATION_VERSION = "2.3.0";
     public static final String APPLICATION_NAME = "Muon SSH";
 
     public enum ConflictAction {

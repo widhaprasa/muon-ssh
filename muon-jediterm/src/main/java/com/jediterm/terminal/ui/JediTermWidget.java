@@ -446,7 +446,7 @@ public class JediTermWidget extends JPanel
 
 			myTextField.setPreferredSize(
 					new Dimension(myTerminalPanel.myCharSize.width * 30,
-							myTerminalPanel.myCharSize.height + 3));
+							myTerminalPanel.myCharSize.height + 12));
 			myTextField.setEditable(true);
 
 			updateLabel(null);

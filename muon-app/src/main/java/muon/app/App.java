@@ -38,7 +38,7 @@ import static util.Constants.*;
  * Hello world!
  */
 public class App {
-    public static final VersionEntry VERSION = new VersionEntry("v" + SIMP_APPLICATION_VERSION);
+    public static final VersionEntry VERSION = new VersionEntry("v" + COMPACT_APPLICATION_VERSION);
     public static final String UPDATE_URL2 = UPDATE_URL + "/check-update.html?v="
             + VERSION.getNumericValue();
     public static String CONFIG_DIR = System.getProperty("user.home") + File.separatorChar + "muon-ssh";
