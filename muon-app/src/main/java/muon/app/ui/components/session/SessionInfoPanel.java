@@ -1,5 +1,6 @@
 package muon.app.ui.components.session;
 
+import muon.app.ui.components.SkinnedPassword;
 import muon.app.ui.components.SkinnedTextArea;
 import muon.app.ui.components.SkinnedTextField;
 import muon.app.ui.components.TabbedPanel;
@@ -26,7 +27,7 @@ public class SessionInfoPanel extends JPanel {
     private JTextField inpHostName;
     private JSpinner inpPort;
     private JTextField inpUserName;
-    private JPasswordField inpPassword;
+    private SkinnedPassword inpPassword;
     private JTextField inpLocalFolder;
     private JTextField inpRemoteFolder;
     private JTextField inpKeyFile;
@@ -638,7 +639,7 @@ public class SessionInfoPanel extends JPanel {
             }
         });
 
-        inpPassword = new JPasswordField(10);
+        inpPassword = new SkinnedPassword(10);
         inpPassword.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override

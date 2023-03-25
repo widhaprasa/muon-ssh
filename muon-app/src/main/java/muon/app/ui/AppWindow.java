@@ -115,6 +115,12 @@ public class AppWindow extends JFrame {
         }
     }
 
+    public void createSession(SessionInfo info) {
+        if (info != null) {
+            sessionListPanel.createSession(info);
+        }
+    }
+
     private JPanel createSessionPanel() {
         JLabel lblSession = new JLabel(bundle.getString("sessions"));
         lblSession.setFont(App.SKIN.getDefaultFont().deriveFont(14.0f));

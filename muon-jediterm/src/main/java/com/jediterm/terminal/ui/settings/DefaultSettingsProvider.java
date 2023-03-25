@@ -208,4 +208,9 @@ public class DefaultSettingsProvider implements SettingsProvider {
   public boolean ambiguousCharsAreDoubleWidth() {
     return false;
   }
+
+  @Override
+  public boolean sendArrowKeysInAlternativeMode() {
+    return true;
+  }
 }

@@ -10,6 +10,7 @@ import muon.app.ui.AppWindow;
 import muon.app.ui.components.session.ExternalEditorHandler;
 import muon.app.ui.components.session.SessionContentPanel;
 import muon.app.ui.components.session.SessionExportImport;
+import muon.app.ui.components.session.SessionInfo;
 import muon.app.ui.components.session.files.transfer.BackgroundFileTransfer;
 import muon.app.ui.components.settings.SettingsPageName;
 import muon.app.ui.laf.AppSkin;
@@ -17,6 +18,7 @@ import muon.app.ui.laf.AppSkinDark;
 import muon.app.ui.laf.AppSkinLight;
 import muon.app.updater.VersionEntry;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import apple.uri.AppleURIHandlerHelper;
 import util.Constants;
 import util.Language;
 import util.PlatformUtils;
@@ -164,7 +166,12 @@ public class App {
             e2.printStackTrace();
         }
 
-        mw.createFirstSessionPanel();
+        // Apple URI Handler for Protocol Handler
+        if (IS_MAC) {
+            AppleURIHandlerHelper.setOpenURIEventHandler(uri -> {
+                mw.createSession(SessionInfo.fromURI(uri));
+            });
+        }
     }
 
     public synchronized static void loadSettings() {

@@ -418,7 +418,7 @@ public class JediTermWidget extends JPanel
 
 	public class SearchPanel extends JPanel implements SearchComponent {
 
-		private final JTextField myTextField = new JTextField();
+		private final JTextField myTextField = new SearchTextField();
 		private final JLabel label = new JLabel();
 		private final JButton prev;
 		private final JButton next;

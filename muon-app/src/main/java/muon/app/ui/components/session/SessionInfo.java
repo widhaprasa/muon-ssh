@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class SessionInfo extends NamedItem implements Serializable {
     private String host, user, localFolder, remoteFolder;
@@ -186,6 +186,60 @@ public class SessionInfo extends NamedItem implements Serializable {
         info.setUser(user);
         info.setName(name);
         return info;
+    }
+
+    public static SessionInfo fromURI(URI uri) {
+
+        if ("m2mrem".equals(uri.getScheme())) {
+            SessionInfo info = new SessionInfo();
+
+            // Parse host and port
+            String host = uri.getHost();
+            int port = uri.getPort();
+            if (port == -1) {
+                port = 22;
+            }
+            String name = host + ':' + port;
+            info.setName(name);
+            info.setHost(host);
+            info.setPort(port);
+
+            // Parse query
+            String query = uri.getQuery();
+            Map<String, String> queryMap = new HashMap<>();
+            if (query != null && !query.isEmpty()) {
+                String[] token = query.split("&");
+                for (String t : token) {
+                    int i = t.indexOf("=");
+                    queryMap.put(URLDecoder.decode(t.substring(0, i), StandardCharsets.UTF_8),
+                            URLDecoder.decode(t.substring(i + 1), StandardCharsets.UTF_8));
+                }
+            }
+
+            // Parse username and password
+            if (queryMap.containsKey("u")) {
+                String b = queryMap.get("u");
+                String user = null;
+                try {
+                    user = new String(Base64.getDecoder().decode(b));
+                } catch (IllegalArgumentException ignored) {
+                }
+
+                if (user != null) {
+                    info.setUser(user);
+                    if (queryMap.containsKey("p")) {
+                        b = queryMap.get("p");
+                        try {
+                            String password = new String(Base64.getDecoder().decode(b));
+                            info.setPassword(password);
+                        } catch (IllegalArgumentException ignored) {
+                        }
+                    }
+                }
+            }
+            return info;
+        }
+        return null;
     }
 
     /**
