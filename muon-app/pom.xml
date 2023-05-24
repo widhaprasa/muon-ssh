@@ -346,7 +346,7 @@
                         <CFBundleDisplayName>Muon</CFBundleDisplayName>
                         <CFBundleDevelopmentRegion>English</CFBundleDevelopmentRegion>
                         <JVMMainClassName>muon.app.App</JVMMainClassName>
-                        <JVMVersion>11+</JVMVersion>
+                        <JVMVersion>11</JVMVersion>
                         <CFBundleURLTypes>
                             <string>m2mrem</string>
                         </CFBundleURLTypes>
